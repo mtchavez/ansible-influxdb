@@ -1,0 +1,60 @@
+---
+
+- name: Download version
+  get_url: url={{influxdb.dl_url}} dest={{influxdb.pkg}}
+  tags:
+    - influxdb
+
+- name: Install package
+  command: dpkg --skip-same-version -i /usr/local/src/influxdb.{{ influxdb.ver }}_amd64.deb
+  register: dpkg_result
+  changed_when: "dpkg_result.stdout.startswith('Selecting')"
+  tags:
+    - influxdb
+
+- name: Remove init.d script
+  file: path=/etc/init.d/influxdb state=absent
+  when: influxdb.keep_initd == true
+  tags:
+    - influxdb
+
+- name: Check for ip address in config file
+  command: grep -E '^\s*hostname.*{{influxdb.hostname}}' {{influxdb.config_file}}
+  register: config_has_ip
+  ignore_errors: true
+  changed_when: false
+  tags:
+    - influxdb
+
+- name: Delete raft dir before hostname change
+  file: dest={{influxdb.raft_dir}} state=absent
+  when: config_has_ip|failed
+  tags:
+    - influxdb
+
+- name: Create storage dir
+  file: path="{{influxdb.storage_dir}}" state=directory
+
+- name: Write config
+  template: src=conf.j2 dest={{influxdb.config_file}}
+  notify:
+    - restart influxdb
+  tags:
+    - influxdb
+
+- name: Write upstart
+  template: src=upstart.j2 dest=/etc/init/influxdb.conf mode=0755
+  when: influxdb.keep_initd == false
+  tags:
+    - influxdb
+
+- name: Start influxdb service
+  service: name=influxdb state=started
+  tags:
+    - influxdb
+
+- name: Iptables
+  template: src=iptables.j2 dest=/etc/iptables.d/05-influxdb
+  tags:
+    - influxdb
+    - iptables

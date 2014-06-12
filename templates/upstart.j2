@@ -1,0 +1,13 @@
+description "Influxdb"
+
+start on runlevel []
+stop on runlevel [016]
+
+respawn
+respawn limit 10 5
+
+limit nofile 60000 60000
+
+env GOMAXPROCS={{influxdb_maxprocs}}
+
+exec influxdb -config={{influxdb_config_file}}

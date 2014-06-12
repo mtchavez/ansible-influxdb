@@ -1,0 +1,24 @@
+---
+galaxy_info:
+  author: mtchavez
+  description: InfluxDB
+  company:
+   - BSD (default)
+   - MIT
+  license: license (GPLv2, CC-BY, etc)
+  min_ansible_version: 1.6
+  - name: Ubuntu
+    versions:
+    - precise
+    - quantal
+    - raring
+    - saucy
+    - trusty
+  categories:
+    - cloud
+    - cloud:ec2
+    - database
+    - database:nosql
+    - monitoring
+dependencies: []
+

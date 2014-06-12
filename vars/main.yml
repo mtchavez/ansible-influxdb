@@ -1,0 +1,64 @@
+---
+influxdb:
+  ver: "0.7.2"
+  dl_url: "http://s3.amazonaws.com/influxdb/{{ ver }}_amd64.deb"
+  pkg: "/usr/local/src/{{ ver }}_amd64.deb"
+  maxprocs: "{{ansible_processor_vcpus}}"
+  hostname: "{{ansible_default_ipv4.address}}"
+  keep_initd: false
+
+  #
+  # Config
+  #
+  bind_addr: "0.0.0.0"
+
+  # [logging]
+  log_level: "error"
+  log_file: "influxdb.log"
+
+  # [admin]
+  admin_port: 8083
+
+  # [api]
+  api_port: 8086
+  read_timeout: "5s"
+
+  # [raft]
+  raft_port: 8090
+  raft_log_dir: "/var/log/influxdb/raft"
+  raft_dir: "/opt/influxdb/shared/data/raft"
+
+  # [storage]
+  storage_dir: "/mnt/influxdb/db"
+  config_file: "/opt/influxdb/shared/config.toml"
+  write_buffer: 10000
+
+  # [cluster]
+  proto_port: 8099
+  proto_timeout: "2s"
+  proto_heartbeat: "200ms"
+  proto_min_backoff: "1s"
+  proto_min_backoff: "10s"
+  write_buffer: 10000
+  resp_buffer: 100000
+  shard_q_limit: 10
+
+  # [leveldb]
+  max_of: 40
+  lru_cache: "200m"
+  max_open_shards: 0
+  point_batch: 100
+
+  # [sharding]
+  repl_factor: 1
+  short_term_dur: "7d"
+  short_term_split: 1
+  long_term_dur: "30d"
+  long_term_split: 1
+
+  # [wal]
+  wal_dir: "/mnt/influxdb/wal"
+  wal_flush: 1000
+  wal_bookmark: 1000
+  wal_index: 1000
+  wal_logfile_req: 10000
