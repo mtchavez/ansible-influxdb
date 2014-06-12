@@ -4,13 +4,14 @@ galaxy_info:
   description: InfluxDB
   license: MIT
   min_ansible_version: 1.6
-  - name: Ubuntu
-    versions:
-    - precise
-    - quantal
-    - raring
-    - saucy
-    - trusty
+  platforms:
+    - name: Ubuntu
+      versions:
+      - precise
+      - quantal
+      - raring
+      - saucy
+      - trusty
   categories:
     - cloud
     - cloud:ec2
