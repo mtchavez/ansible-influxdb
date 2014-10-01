@@ -63,7 +63,7 @@ influxdb_long_term_split: 1
 
 # [wal]
 influxdb_wal_dir: "/mnt/influxdb/wal"
-wal_flush: 1000
-wal_bookmark: 1000
-wal_index: 1000
-wal_logfile_req: 10000
+influxdb_wal_flush: 1000
+influxdb_wal_bookmark: 1000
+influxdb_wal_index: 1000
+influxdb_wal_logfile_req: 10000
