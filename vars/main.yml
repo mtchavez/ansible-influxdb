@@ -1,8 +1,8 @@
 ---
 influxdb_ver: "0.8.3"
 influxdb_arch: "amd64"
-influxdb_dl_url: "http://s3.amazonaws.com/influxdb/{{ ver }}_{{ arch }}.deb"
-influxdb_pkg: "/usr/local/src/{{ ver }}_{{ arch }}.deb"
+influxdb_dl_url: "http://s3.amazonaws.com/influxdb/{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
+influxdb_pkg: "/usr/local/src/{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
 influxdb_maxprocs: "{{ansible_processor_vcpus}}"
 influxdb_hostname: "{{ansible_default_ipv4.address}}"
 influxdb_keep_initd: false
