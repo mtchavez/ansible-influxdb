@@ -12,4 +12,4 @@ console log
 
 env GOMAXPROCS={{influxdb_maxprocs}}
 
-exec start-stop-daemon --chuid influxdb:influxdb --pidfile {{influxdb_pid}} --start --oknodo --exec /usr/bin/influxdb -- -config="{{influxdb_config_file}}" -pidfile={{influxdb_pid}} -stdout
+exec sudo su -u {{influxdb_user}} -c "usr/bin/influxdb -config={{influxdb_config_file}}"

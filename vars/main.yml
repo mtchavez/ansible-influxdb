@@ -17,7 +17,8 @@ influxdb_bind_addr: "0.0.0.0"
 
 # [logging]
 influxdb_log_level: "error"
-influxdb_log_file: "/var/log/influxdb/influxdb.log"
+influxdb_log_dir: "/var/log/influxdb/"
+influxdb_log_file: "{{influxdb_log_dir}}/influxdb.log"
 
 # [admin]
 influxdb_admin_port: 8083
