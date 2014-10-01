@@ -34,6 +34,8 @@
 
 - name: Create storage dir
   file: path="{{influxdb.storage_dir}}" state=directory
+  tags:
+    - influxdb
 
 - name: Write config
   template: src=conf.j2 dest={{influxdb.config_file}}

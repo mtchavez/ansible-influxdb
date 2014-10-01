@@ -24,6 +24,11 @@ influxdb:
   api_port: 8086
   read_timeout: "5s"
 
+  # [input plugins]
+  graphite_plugin_enabled: false
+  graphite_plugin_port: 2003
+  graphite_plugin_db: "graphite"
+
   # [raft]
   raft_port: 8090
   raft_log_dir: "/var/log/influxdb/raft"

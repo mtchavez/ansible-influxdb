@@ -32,9 +32,9 @@ read-timeout = "{{influxdb.read_timeout}}"
 
   # Configure the graphite api
   [input_plugins.graphite]
-  enabled = false
-  # port = 2003
-  # database = ""  # store graphite data in this database
+  enabled = {{influxdb.graphite_plugin_enabled}}
+  port = {{influxdb.graphite_plugin_port}}
+  database = "{{influxdb.graphite_plugin_db}}"  # store graphite data in this database
 
 # Raft configuration
 [raft]
