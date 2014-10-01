@@ -6,7 +6,7 @@
     - influxdb
 
 - name: Install package
-  command: dpkg --skip-same-version -i /usr/local/src/influxdb.{{ influxdb.ver }}_amd64.deb
+  command: dpkg --skip-same-version -i /usr/local/src/influxdb.{{ influxdb.ver }}_{{ influxdb.arch }}.deb
   register: dpkg_result
   changed_when: "dpkg_result.stdout.startswith('Selecting')"
   tags:
