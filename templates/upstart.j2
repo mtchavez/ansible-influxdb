@@ -1,13 +1,15 @@
 description "Influxdb"
 
-start on runlevel []
-stop on runlevel [016]
+start on runlevel [2345]
+stop on runlevel [!2345]
 
 respawn
 respawn limit 10 5
 
 limit nofile unlimited unlimited
 
+console log
+
 env GOMAXPROCS={{influxdb_maxprocs}}
 
-exec influxdb -config="{{influxdb_config_file}}"
+exec start-stop-daemon --chuid influxdb:influxdb --pidfile {{influxdb_pid}} --start --oknodo --exec /usr/bin/influxdb -- -config="{{influxdb_config_file}}" -pidfile={{influxdb_pid}} -stdout

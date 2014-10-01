@@ -33,12 +33,12 @@
     - influxdb
 
 - name: Create storage dir
-  file: path="{{influxdb_storage_dir}}" state=directory
+  file: path="{{influxdb_storage_dir}}" state=directory group={{influxdb_group}} user={{influxdb_user}}
   tags:
     - influxdb
 
 - name: Write config
-  template: src=conf.j2 dest={{influxdb_config_file}}
+  template: src=conf.j2 dest={{influxdb_config_file}} group={{influxdb_group}} user={{influxdb_user}}
   notify:
     - restart influxdb
   tags:
