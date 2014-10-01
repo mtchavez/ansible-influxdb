@@ -1,8 +1,8 @@
 ---
 influxdb_ver: "0.8.3"
 influxdb_arch: "amd64"
-influxdb_dl_url: "http://s3.amazonaws.com/influxdb/{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
-influxdb_pkg: "/usr/local/src/{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
+influxdb_dl_url: "http://s3.amazonaws.com/influxdb/influxdb_{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
+influxdb_pkg: "/usr/local/src/influxdb_{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
 influxdb_maxprocs: "{{ansible_processor_vcpus}}"
 influxdb_hostname: "{{ansible_default_ipv4.address}}"
 influxdb_keep_initd: false
@@ -24,9 +24,9 @@ influxdb_api_port: 8086
 influxdb_read_timeout: "5s"
 
 # [input plugins]
-influxdb_graphite_plugin_enabled: false
+influxdb_graphite_plugin_enabled: true
 influxdb_graphite_plugin_port: 2003
-influxdb_graphite_plugin_db: "graphite"
+influxdb_graphite_plugin_db: "metrics"
 
 # [raft]
 influxdb_raft_port: 8090
@@ -48,7 +48,7 @@ influxdb_write_buffer: 10000
 influxdb_resp_buffer: 100000
 influxdb_shard_q_limit: 10
 
-# [leveldb]
+# [rocksdb]
 influxdb_max_of: 40
 influxdb_lru_cache: "200m"
 influxdb_max_open_shards: 0
