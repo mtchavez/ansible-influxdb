@@ -38,7 +38,7 @@
     - influxdb
 
 - name: Ensure log directory
-  file: path="{influxdb_log_dir}}" state=directory group={{influxdb_group}} owner={{influxdb_user}}
+  file: path="{{influxdb_log_dir}}" state=directory group={{influxdb_group}} owner={{influxdb_user}}
   tags:
     - influxdb
 
