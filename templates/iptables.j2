@@ -5,6 +5,6 @@
 
 # InfluxDB Graphite Port
 {% if influxdb_graphite_plugin_enabled == "true" %}
--A INPUT -p tcp --dports {{influxdb_graphite_plugin_port}} -j ACCEPT
+-A INPUT -p tcp --dport {{influxdb_graphite_plugin_port}} -j ACCEPT
 {% endif %}
 
