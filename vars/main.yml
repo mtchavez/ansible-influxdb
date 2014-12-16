@@ -1,5 +1,5 @@
 ---
-influxdb_ver: "0.8.3"
+influxdb_ver: "0.8.7"
 influxdb_arch: "amd64"
 influxdb_dl_url: "http://s3.amazonaws.com/influxdb/influxdb_{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
 influxdb_pkg: "/usr/local/src/influxdb_{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
