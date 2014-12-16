@@ -1,5 +1,6 @@
 InfluxDB
 ========
+[![Latest Version](http://img.shields.io/github/release/mtchavez/ansible-influxdb.svg?style=flat-square)](https://github.com/mtchavez/ansible-influxdb/releases)
 [![Build Status](https://travis-ci.org/mtchavez/ansible-influxdb.svg?branch=master)](https://travis-ci.org/mtchavez/ansible-influxdb)
 
 InfluxDB Ansible Galaxy role. Sets up a working InfluxDB server
