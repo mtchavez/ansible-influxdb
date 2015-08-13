@@ -39,6 +39,7 @@ influxdb_raft_dir: "/opt/influxdb/shared/data/raft"
 
 # [storage]
 influxdb_storage_dir: "/mnt/influxdb/db"
+influxdb_config_dir: "/opt/influxdb/shared/"
 influxdb_config_file: "/opt/influxdb/shared/config.toml"
 influxdb_write_buffer: 10000
 
