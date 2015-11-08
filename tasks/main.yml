@@ -1,77 +1,75 @@
 ---
 
 - name: Download version
-  get_url: url={{influxdb_dl_url}} dest={{influxdb_pkg}}
+  get_url:
+    url: "{{influxdb_dl_url}}"
+    dest: "{{influxdb_pkg}}"
   tags:
     - influxdb
 
 - name: Install package
-  command: dpkg --skip-same-version -i /usr/local/src/influxdb_{{ influxdb_ver }}_{{ influxdb_arch }}.deb
+  command: "dpkg --skip-same-version -i /usr/local/src/influxdb_{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
   register: dpkg_result
   changed_when: "dpkg_result.stdout.startswith('Selecting')"
+  when: ansible_distribution in ['Ubuntu', 'Debian']
   tags:
     - influxdb
 
-- name: Remove init.d script
-  file: path=/etc/init.d/influxdb state=absent
-  when: influxdb_keep_initd == true
+- name: Create data dir
+  file:
+    path: "{{influxdb_data_dir}}"
+    state: directory
+    group: "{{influxdb_group}}"
+    owner: "{{influxdb_user}}"
   tags:
     - influxdb
 
-- name: Check for ip address in config file
-  command: grep -E '^\s*hostname.*{{influxdb_hostname}}' {{influxdb_config_file}}
-  register: config_has_ip
-  ignore_errors: true
-  changed_when: false
+- name: Create meta dir
+  file:
+    path: "{{influxdb_meta_dir}}"
+    state: directory
+    group: "{{influxdb_group}}"
+    owner: "{{influxdb_user}}"
   tags:
     - influxdb
 
-- name: Delete raft dir before hostname change
-  file: dest={{influxdb_raft_dir}} state=absent
-  when: config_has_ip|failed
+- name: Create hh dir
+  file:
+    path: "{{influxdb_hh_dir}}"
+    state: directory
+    group: "{{influxdb_group}}"
+    owner: "{{influxdb_user}}"
   tags:
     - influxdb
 
-- name: Create storage dir
-  file: path="{{influxdb_storage_dir}}" state=directory group={{influxdb_group}} owner={{influxdb_user}}
-  tags:
-    - influxdb
-
-- name: Ensure log directory
-  file: path="{{influxdb_log_dir}}" state=directory group={{influxdb_group}} owner={{influxdb_user}}
-  tags:
-    - influxdb
-
-- name: Ensure config directory
-  file: path="{{influxdb_config_dir}}" state=directory group={{influxdb_group}} owner={{influxdb_user}}
+- name: Create config directory
+  file:
+    path: "{{influxdb_config_dir}}"
+    state: directory
+    group: "{{influxdb_group}}"
+    owner: "{{influxdb_user}}"
   tags:
     - influxdb
 
 - name: Write config
-  template: src=conf.j2 dest={{influxdb_config_file}} group={{influxdb_group}} owner={{influxdb_user}}
+  template:
+    src: conf.j2
+    dest: "{{influxdb_generated_config}}"
+    group: "{{influxdb_group}}"
+    owner: "{{influxdb_user}}"
   notify:
     - restart influxdb
   tags:
     - influxdb
 
-- name: Write upstart
-  template: src=upstart.j2 dest=/etc/init/influxdb_conf mode=0755
-  when: influxdb_keep_initd == false
+- name: Run config update
+  command: "sudo su -c \"{{influxdb_opt_dir}}/influxd config -config {{influxdb_generated_config}} > {{influxdb_config_file}}\" {{influxdb_user}}"
   tags:
     - influxdb
 
 - name: Start influxdb service
-  service: name=influxdb state=started
+  service:
+    name: influxdb
+    state: started
   tags:
     - influxdb
-
-- name: Ensure Iptables directory
-  file: path="/etc/iptables.d" state=directory group=root owner=root
-  tags:
-    - influxdb
-
-- name: Iptables
-  template: src=iptables.j2 dest=/etc/iptables.d/05-influxdb
-  tags:
-    - influxdb
-    - iptables
