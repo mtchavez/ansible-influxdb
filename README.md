@@ -13,7 +13,7 @@ Ansible version 1.6 and greater
 Role Variables
 --------------
 
-Variables are mostly what exists in the InfluxDB config file. Which you can see [here](http://influxdb.com/docs/v0.7/advanced_topics/configuration_options.html)
+Variables are mostly what exists in the InfluxDB config file. Which you can see [here](https://raw.githubusercontent.com/influxdb/influxdb/master/etc/config.sample.toml)
 
 **Currenlty clustering is not taken into account for.**
 
