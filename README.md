@@ -3,7 +3,10 @@ InfluxDB
 [![Latest Version](http://img.shields.io/github/release/mtchavez/ansible-influxdb.svg?style=flat-square)](https://github.com/mtchavez/ansible-influxdb/releases)
 [![Build Status](https://travis-ci.org/mtchavez/ansible-influxdb.svg?branch=master)](https://travis-ci.org/mtchavez/ansible-influxdb)
 
-InfluxDB Ansible Galaxy role. Sets up a working InfluxDB server. This role is for versions of InfluxDB >= `0.9.3` and is currently defaulted to `0.9.4.2`.
+InfluxDB Ansible Galaxy role. Sets up a working InfluxDB server.
+This role is for versions of InfluxDB >= `0.9.3` and is currently defaulted to `0.9.4.2`.
+
+**Currenlty clustering is not taken into account for.**
 
 Requirements
 ------------
@@ -35,7 +38,6 @@ influxdb_leader_lease_timeout: "500ms"
 influxdb_commit_timeout: "50ms"
 
 # [data]
-
 influxdb_data_dir: "/var/opt/influxdb/data"
 influxdb_data_engine: "bz1"
 influxdb_max_wal_size: 104857600
@@ -145,8 +147,6 @@ influxdb_cqueries_recompute_no_older_than: "10m"
 influxdb_cqueries_compute_runs_per_interval: 10
 influxdb_cqueries_compute_no_more_than: "2m"
 ```
-
-**Currenlty clustering is not taken into account for.**
 
 Dependencies
 ------------
