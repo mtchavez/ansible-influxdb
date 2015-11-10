@@ -1,3 +1,8 @@
+# v 3.0.1 – 2015-11-09
+
+* Create influxdb user and group
+* Create wal directory
+
 # v3.0 – 2015-11-07
 
 * Update influxdb to 0.9.4.2
