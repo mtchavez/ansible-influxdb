@@ -1,5 +1,20 @@
 ---
 
+- name: Create influxdb group
+  group:
+    name: "{{influxdb_group}}"
+    state: present
+  tags:
+    - influxdb
+
+- name: Create influxdb user
+  user:
+    name: "{{influxdb_user}}"
+    group: "{{influxdb_group}}"
+    state: present
+  tags:
+    - influxdb
+
 - name: Download version
   get_url:
     url: "{{influxdb_dl_url}}"
