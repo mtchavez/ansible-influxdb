@@ -57,6 +57,15 @@
   tags:
     - influxdb
 
+- name: Create wal dir
+  file:
+    path: "{{influxdb_wal_dir}}"
+    state: directory
+    group: "{{influxdb_group}}"
+    owner: "{{influxdb_user}}"
+  tags:
+    - influxdb
+
 - name: Create config directory
   file:
     path: "{{influxdb_config_dir}}"
