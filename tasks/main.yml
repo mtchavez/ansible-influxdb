@@ -86,8 +86,29 @@
   tags:
     - influxdb
 
+# TODO: Find out why this doesn't work
 - name: Run config update
-  command: "sudo su -c \"{{influxdb_opt_dir}}/influxd config -config {{influxdb_generated_config}} > {{influxdb_config_file}}\" {{influxdb_user}}"
+  command: "sudo /opt/influxdb/influxd config -config {{influxdb_generated_config}}"
+  register: influxdb_merged_config
+  tags:
+    - influxdb
+
+- name: Write merged config
+  copy:
+    content: "{{influxdb_merged_config.stdout}}"
+    dest: "{{influxdb_config_file}}"
+    group: "{{influxdb_group}}"
+    owner: "{{influxdb_user}}"
+  tags:
+    - influxdb
+
+- name: Ensure directories have correct permissions
+  command: "sudo chown -R {{influxdb_group}}:{{influxdb_user}} {{item}}"
+  with_items:
+    - "{{influxdb_meta_dir}}"
+    - "{{influxdb_data_dir}}"
+    - "{{influxdb_hh_dir}}"
+    - "{{influxdb_wal_dir}}"
   tags:
     - influxdb
 
