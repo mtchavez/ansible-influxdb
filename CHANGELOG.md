@@ -1,4 +1,9 @@
-# v 3.0.1 – 2015-11-09
+# v3.0.1 – 2015-11-11
+
+* Fix config merging
+* Default collectd variables
+
+# v3.0.1 – 2015-11-09
 
 * Create influxdb user and group
 * Create wal directory
