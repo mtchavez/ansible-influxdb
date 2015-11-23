@@ -81,6 +81,7 @@
     dest: "{{influxdb_generated_config}}"
     group: "{{influxdb_group}}"
     owner: "{{influxdb_user}}"
+  register: write_config
   notify:
     - restart influxdb
   tags:
@@ -90,6 +91,7 @@
 - name: Run config update
   command: "sudo /opt/influxdb/influxd config -config {{influxdb_generated_config}}"
   register: influxdb_merged_config
+  when: write_config | changed
   tags:
     - influxdb
 
@@ -99,6 +101,7 @@
     dest: "{{influxdb_config_file}}"
     group: "{{influxdb_group}}"
     owner: "{{influxdb_user}}"
+  when: influxdb_merged_config | changed
   tags:
     - influxdb
 
