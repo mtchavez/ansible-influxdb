@@ -103,7 +103,11 @@
     - influxdb
 
 - name: Ensure directories have correct permissions
-  command: "sudo chown -R {{influxdb_group}}:{{influxdb_user}} {{item}}"
+  file:
+    path: "{{ item }}"
+    owner: "{{ influxdb_user }}"
+    group: "{{ influxdb_group }}"
+    recurse: yes
   with_items:
     - "{{influxdb_meta_dir}}"
     - "{{influxdb_data_dir}}"
