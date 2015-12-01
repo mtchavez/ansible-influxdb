@@ -113,7 +113,7 @@ influxdb_graphite_ignore_unnamed: "false"
 influxdb_collectd_enabled: "false"
 influxdb_collectd_bind_address: ""
 influxdb_collectd_database: ""
-influxdb_collectd_typesdb: ""
+influxdb_collectd_typesdb_directory: ""
 influxdb_collectd_batch_size: 1000
 influxdb_collectd_batch_pending: 5
 influxdb_collectd_batch_timeout: "1s"
