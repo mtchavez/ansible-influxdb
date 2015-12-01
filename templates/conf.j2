@@ -250,7 +250,7 @@ reporting-disabled = {{influxdb_reporting_disabled}}
   {% if influxdb_collectd_enabled == "true" %}
   bind-address = "{{influxdb_collectd_bind_address}}"
   database = "{{influxdb_collectd_database}}"
-  typesdb = "{{influxdb_collectd_typesdb}}"
+  typesdb = "{{influxdb_collectd_typesdb_directory}}/types.db"
 
   # These next lines control how batching works. You should have this enabled
   # otherwise you could get dropped metrics or poor performance. Batching

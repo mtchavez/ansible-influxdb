@@ -104,6 +104,9 @@
   when: influxdb_merged_config | changed
   tags:
     - influxdb
+- name: Perform collectd specific configuration
+  include: collectd.yml
+  when: influxdb_collectd_enabled == 'true'
 
 - name: Ensure directories have correct permissions
   file:
