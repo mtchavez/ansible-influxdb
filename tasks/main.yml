@@ -89,7 +89,7 @@
 
 # TODO: Find out why this doesn't work
 - name: Run config update
-  command: "sudo /opt/influxdb/influxd config -config {{influxdb_generated_config}}"
+  command: "sudo /usr/bin/influxd config -config {{influxdb_generated_config}}"
   register: influxdb_merged_config
   when: write_config | changed
   tags:
