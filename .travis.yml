@@ -11,6 +11,7 @@ script:
   - ansible-playbook -i inventory --syntax-check --list-tasks role.yml
   - ansible-playbook --connection=local -i inventory role.yml
   - ansible-playbook --connection=local -i inventory role.yml | grep -q 'changed=0.*failed=0'
+  - echo "Wait for influxdb to come up..." && sleep 10
   - ps aux | grep -v grep | grep influxdb
   - netstat -ntlp | grep 8088
   - netstat -ntlp | grep 8086

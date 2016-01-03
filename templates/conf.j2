@@ -29,7 +29,7 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ###
 
 [meta]
-  dir = "/var/opt/influxdb/meta"
+  dir = "{{influxdb_meta_dir}}"
   hostname = "{{influxdb_hostname}}"
   bind-address = "{{influxdb_bind_address}}"
   retention-autocreate = {{influxdb_retention_autocreate}}
