@@ -1,3 +1,9 @@
+# v4.0.0 – 2016-01-02
+
+* Use `defaults/main.yml` for variables
+* Upgrade role for changes introduced in `0.9.5` with updated directories
+* Breaking changes for versions before `0.9.5` due to directory updates
+
 # v3.0.1 – 2015-11-11
 
 * Fix config merging
