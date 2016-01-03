@@ -1,7 +1,9 @@
 ---
-influxdb_ver: "0.9.4.2"
+influxdb_ver: "0.9.6.1"
+influxdb_checksums:
+  0_9_6_1: "bd13fc5f21ec7f598b603f2a19b4005f"
 influxdb_arch: "amd64"
-influxdb_dl_url: "http://influxdb.s3.amazonaws.com/influxdb_{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
+influxdb_dl_url: "https://s3.amazonaws.com/influxdb/influxdb_{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
 influxdb_pkg: "/usr/local/src/influxdb_{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
 influxdb_maxprocs: "{{ansible_processor_vcpus}}"
 influxdb_hostname: "{{ansible_default_ipv4.address}}"
@@ -9,18 +11,21 @@ influxdb_keep_initd: false
 influxdb_user: "influxdb"
 influxdb_group: "influxdb"
 influxdb_pid: "/var/run/influxdb/influxdb.pid"
-influxdb_opt_dir: "/opt/influxdb"
+influxdb_base_data_dir: "/var/lib/influxdb"
+influxdb_influxd_bin: "/usr/bin/influxd"
+influxdb_scripts_dir: "/usr/lib/influxdb/scripts"
+influxdb_influxd_opts: ""
 
 #
 # Config
 #
-influxdb_config_dir: "/etc/opt/influxdb"
+influxdb_config_dir: "/etc/influxdb"
 influxdb_config_file: "{{influxdb_config_dir}}/influxdb.conf"
 influxdb_generated_config: "{{influxdb_config_dir}}/influxdb.generated.conf"
 influxdb_reporting_disabled: "false"
 
 # [meta]
-influxdb_meta_dir: "/var/opt/influxdb/meta"
+influxdb_meta_dir: "{{influxdb_base_data_dir}}/meta"
 influxdb_hostname: "localhost"
 influxdb_bind_address: ":8088"
 influxdb_retention_autocreate: "true"
@@ -30,13 +35,12 @@ influxdb_leader_lease_timeout: "500ms"
 influxdb_commit_timeout: "50ms"
 
 # [data]
-
-influxdb_data_dir: "/var/opt/influxdb/data"
+influxdb_data_dir: "{{influxdb_base_data_dir}}/data"
 influxdb_data_engine: "bz1"
 influxdb_max_wal_size: 104857600
 influxdb_wal_flush_interval: "10m"
 influxdb_wal_partition_flush_delay: "2s"
-influxdb_wal_dir: "/var/opt/influxdb/wal"
+influxdb_wal_dir: "{{influxdb_base_data_dir}}/wal"
 influxdb_wal_enable_logging: "true"
 influxdb_wal_ready_series_size: 25600
 influxdb_wal_compaction_threshold: 0.6
@@ -47,7 +51,7 @@ influxdb_query_log_enabled: "false"
 
 # [hinted-handoff]
 influxdb_hh_enabled: "true"
-influxdb_hh_dir: "/var/opt/influxdb/hh"
+influxdb_hh_dir: "{{influxdb_base_data_dir}}/hh"
 influxdb_hh_max_size: 1073741824
 influxdb_hh_max_age: "168h"
 influxdb_hh_retry_rate_limit: 0

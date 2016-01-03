@@ -15,6 +15,7 @@
   tags:
     - influxdb
 
+# TODO: Use md5sum to check download
 - name: Download version
   get_url:
     url: "{{influxdb_dl_url}}"
@@ -23,7 +24,7 @@
     - influxdb
 
 - name: Install package
-  command: "dpkg --skip-same-version -i /usr/local/src/influxdb_{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
+  command: "dpkg --skip-same-version -i {{influxdb_pkg}}"
   register: dpkg_result
   changed_when: "dpkg_result.stdout.startswith('Selecting')"
   when: ansible_distribution in ['Ubuntu', 'Debian']
@@ -88,8 +89,9 @@
     - influxdb
 
 # TODO: Find out why this doesn't work
+# TODO: Update to use Ansible 2.0 run as instead of sudo
 - name: Run config update
-  command: "sudo /opt/influxdb/influxd config -config {{influxdb_generated_config}}"
+  command: "sudo {{influxdb_influxd_bin}} config -config {{influxdb_generated_config}}"
   register: influxdb_merged_config
   when: write_config | changed
   tags:
@@ -107,9 +109,9 @@
 
 - name: Ensure directories have correct permissions
   file:
-    path: "{{ item }}"
-    owner: "{{ influxdb_user }}"
-    group: "{{ influxdb_group }}"
+    path: "{{item }}"
+    owner: "{{influxdb_user}}"
+    group: "{{influxdb_group}}"
     recurse: yes
   with_items:
     - "{{influxdb_meta_dir}}"
@@ -119,9 +121,17 @@
   tags:
     - influxdb
 
+- name: Write init.d script
+  template:
+    src: init.d.influxd.j2
+    dest: "/etc/init.d/influxd"
+    mode: 0755
+  tags:
+    - influxdb
+
 - name: Start influxdb service
   service:
-    name: influxdb
+    name: influxd
     state: started
   tags:
     - influxdb
