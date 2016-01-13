@@ -19,6 +19,12 @@ galaxy_info:
       - lenny
       - squeeze
       - wheezy
+    - name: EL
+      versions:
+      - all
+      - 5
+      - 6
+      - 7
   categories:
     - cloud
     - cloud:ec2
