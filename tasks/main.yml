@@ -3,7 +3,7 @@
 - name: Set fact Debian
   set_fact:
     influxdb_dl_url: "{{ influxdb_deb_dl_url }}"
-    influxdb_pkg: "{{ influxdb_deb_pkg }}.deb"
+    influxdb_pkg: "{{ influxdb_deb_pkg }}"
     influxdb_arch: "{{ influxdb_deb_arch }}"
     influxdb_version: "{{ influxdb_ver.replace('.','_') }}"
     influxdb_checksums: "{{ influxdb_checksums_deb }}"
