@@ -2,29 +2,29 @@
 
 - name: Set fact Debian
   set_fact:
-    influxdb_dl_url: "{{ influxdb_deb_dl_url }}"
-    influxdb_pkg: "{{ influxdb_deb_pkg }}"
-    influxdb_arch: "{{ influxdb_deb_arch }}"
-    influxdb_version: "{{ influxdb_ver.replace('.','_') }}"
-    influxdb_checksums: "{{ influxdb_checksums_deb }}"
+    influxdb_dl_url: "{{influxdb_deb_dl_url}}"
+    influxdb_pkg: "{{influxdb_deb_pkg}}"
+    influxdb_arch: "{{influxdb_deb_arch}}"
+    influxdb_version: "{{influxdb_ver.replace('.','_')}}"
+    influxdb_checksums: "{{influxdb_checksums_deb}}"
   when: ansible_os_family == "Debian"
   tags:
     - influxdb
 
 - name: Set fact RedHat
   set_fact:
-    influxdb_dl_url: "{{ influxdb_rpm_dl_url }}"
-    influxdb_pkg: "{{ influxdb_rpm_pkg }}"
-    influxdb_arch: "{{ influxdb_rpm_arch }}"
-    influxdb_version: "{{ influxdb_ver.replace('.','_') }}"
-    influxdb_checksums: "{{ influxdb_checksums_rpm }}"
+    influxdb_dl_url: "{{influxdb_rpm_dl_url}}"
+    influxdb_pkg: "{{influxdb_rpm_pkg}}"
+    influxdb_arch: "{{influxdb_rpm_arch}}"
+    influxdb_version: "{{influxdb_ver.replace('.','_')}}"
+    influxdb_checksums: "{{influxdb_checksums_rpm}}"
   when: ansible_os_family == "RedHat"
   tags:
     - influxdb
 
 - name: Set fact for md5 checksum
   set_fact:
-    influxdb_checksum: "{{ influxdb_checksums[influxdb_version] }}"
+    influxdb_checksum: "{{influxdb_checksums[influxdb_version]}}"
   tags:
     - influxdb
 
@@ -45,8 +45,8 @@
 
 - name: Download version
   get_url:
-    url: "{{ influxdb_dl_url }}"
-    dest: "{{ influxdb_pkg }}"
+    url: "{{influxdb_dl_url}}"
+    dest: "{{influxdb_pkg}}"
   tags:
     - influxdb
 
@@ -75,7 +75,7 @@
 
 - name: Install package (RedHat)
   yum:
-    name: "{{ influxdb_pkg }}"
+    name: "{{influxdb_pkg}}"
     state: installed
   when: ansible_os_family == "RedHat"
   tags:
