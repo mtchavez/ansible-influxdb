@@ -270,11 +270,11 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 [opentsdb]
   enabled = {{influxdb_tsb_enabled}}
   {% if influxdb_tsb_enabled == "true" %}
-  bind-address = "{{influxdb_tsb_bind_address}}j"
+  bind-address = "{{influxdb_tsb_bind_address}}"
   database = "{{influxdb_tsb_database}}"
   retention-policy = "{{influxdb_tsb_retention_policy}}"
   consistency-level = "{{influxdb_tsb_consistency_level}}"
-  tls-enabled = {{influxdb_tsb_tsl_enabled}}
+  tls-enabled = {{influxdb_tsb_tls_enabled}}
   certificate = "{{influxdb_tsb_certificate}}"
 
   # These next lines control how batching works. You should have this enabled
@@ -283,7 +283,7 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 
   batch-size = {{influxdb_tsb_batch_size}} # will flush if this many points get buffered
   batch-pending = {{influxdb_tsb_batch_pending}} # number of batches that may be pending in memory
-  batch-timeout = "{{influxdb_tsb_timeout}}" # will flush at least this often even if we haven't hit buffer limit
+  batch-timeout = "{{influxdb_tsb_batch_timeout}}" # will flush at least this often even if we haven't hit buffer limit
   {% endif %}
 
 ###
