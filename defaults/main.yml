@@ -1,11 +1,16 @@
 ---
 # defaults file for influxdb
 influxdb_ver: "0.9.6.1"
-influxdb_checksums:
+influxdb_checksums_deb:
   0_9_6_1: "bd13fc5f21ec7f598b603f2a19b4005f"
-influxdb_arch: "amd64"
-influxdb_dl_url: "https://s3.amazonaws.com/influxdb/influxdb_{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
-influxdb_pkg: "/usr/local/src/influxdb_{{ influxdb_ver }}_{{ influxdb_arch }}.deb"
+influxdb_checksums_rpm:
+  0_9_6_1: "032607096a2462a79dada75c286f0e97"
+influxdb_deb_arch: "amd64"
+influxdb_deb_dl_url: "https://s3.amazonaws.com/influxdb/influxdb_{{influxdb_ver}}_{{influxdb_deb_arch}}.deb"
+influxdb_deb_pkg: "/usr/local/src/influxdb_{{influxdb_ver}}_{{influxdb_deb_arch}}.deb"
+influxdb_rpm_arch: "x86_64"
+influxdb_rpm_dl_url: "https://s3.amazonaws.com/influxdb/influxdb-{{influxdb_ver}}-1.{{influxdb_rpm_arch}}.rpm"
+influxdb_rpm_pkg: "/usr/local/src/influxdb-{{influxdb_ver}}-1.{{influxdb_rpm_arch}}.rpm"
 influxdb_maxprocs: "{{ansible_processor_vcpus}}"
 influxdb_hostname: "{{ansible_default_ipv4.address}}"
 influxdb_keep_initd: false

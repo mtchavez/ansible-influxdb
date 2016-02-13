@@ -1,5 +1,33 @@
 ---
 
+- name: Set fact Debian
+  set_fact:
+    influxdb_dl_url: "{{influxdb_deb_dl_url}}"
+    influxdb_pkg: "{{influxdb_deb_pkg}}"
+    influxdb_arch: "{{influxdb_deb_arch}}"
+    influxdb_version: "{{influxdb_ver.replace('.','_')}}"
+    influxdb_checksums: "{{influxdb_checksums_deb}}"
+  when: ansible_os_family == "Debian"
+  tags:
+    - influxdb
+
+- name: Set fact RedHat
+  set_fact:
+    influxdb_dl_url: "{{influxdb_rpm_dl_url}}"
+    influxdb_pkg: "{{influxdb_rpm_pkg}}"
+    influxdb_arch: "{{influxdb_rpm_arch}}"
+    influxdb_version: "{{influxdb_ver.replace('.','_')}}"
+    influxdb_checksums: "{{influxdb_checksums_rpm}}"
+  when: ansible_os_family == "RedHat"
+  tags:
+    - influxdb
+
+- name: Set fact for md5 checksum
+  set_fact:
+    influxdb_checksum: "{{influxdb_checksums[influxdb_version]}}"
+  tags:
+    - influxdb
+
 - name: Create influxdb group
   group:
     name: "{{influxdb_group}}"
@@ -15,7 +43,6 @@
   tags:
     - influxdb
 
-# TODO: Use md5sum to check download
 - name: Download version
   get_url:
     url: "{{influxdb_dl_url}}"
@@ -23,11 +50,34 @@
   tags:
     - influxdb
 
-- name: Install package
+- name: Get checksum downloaded file
+  stat:
+    path: "{{influxdb_pkg}}"
+    get_md5: True
+  register: checksum_validate
+  tags:
+    - influxdb
+
+- name: Validate checksum
+  fail:
+    msg: The checksum is not the same
+  when: checksum_validate.stat.md5 != influxdb_checksum
+  tags:
+    - influxdb
+
+- name: Install package (Debian)
   command: "dpkg --skip-same-version -i {{influxdb_pkg}}"
   register: dpkg_result
   changed_when: "dpkg_result.stdout.startswith('Selecting')"
-  when: ansible_distribution in ['Ubuntu', 'Debian']
+  when: ansible_os_family == "Debian"
+  tags:
+    - influxdb
+
+- name: Install package (RedHat)
+  yum:
+    name: "{{influxdb_pkg}}"
+    state: installed
+  when: ansible_os_family == "RedHat"
   tags:
     - influxdb
 
