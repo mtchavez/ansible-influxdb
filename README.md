@@ -23,8 +23,8 @@ Variables are mostly what exists in the InfluxDB config file. Which you can see 
 # Config
 #
 influxdb_config_dir: "/etc/influxdb"
-influxdb_config_file: "{{influxdb_config_dir}}/influxdb.conf"
-influxdb_generated_config: "{{influxdb_config_dir}}/influxdb.generated.conf"
+influxdb_config_file: "{{ influxdb_config_dir }}/influxdb.conf"
+influxdb_generated_config: "{{ influxdb_config_dir }}/influxdb.generated.conf"
 influxdb_reporting_disabled: "false"
 influxdb_base_data_dir: "/var/lib/influxdb"
 influxdb_influxd_bin: "/usr/bin/influxd"
@@ -34,12 +34,12 @@ influxdb_scripts_dir: "/usr/lib/influxdb/scripts"
 # Config
 #
 influxdb_config_dir: "/etc/influxdb"
-influxdb_config_file: "{{influxdb_config_dir}}/influxdb.conf"
-influxdb_generated_config: "{{influxdb_config_dir}}/influxdb.generated.conf"
+influxdb_config_file: "{{ influxdb_config_dir }}/influxdb.conf"
+influxdb_generated_config: "{{ influxdb_config_dir }}/influxdb.generated.conf"
 influxdb_reporting_disabled: "false"
 
 # [meta]
-influxdb_meta_dir: "{{influxdb_base_data_dir}}/meta"
+influxdb_meta_dir: "{{ influxdb_base_data_dir }}/meta"
 influxdb_hostname: "localhost"
 influxdb_bind_address: ":8088"
 influxdb_retention_autocreate: "true"
@@ -49,12 +49,12 @@ influxdb_leader_lease_timeout: "500ms"
 influxdb_commit_timeout: "50ms"
 
 # [data]
-influxdb_data_dir: "{{influxdb_base_data_dir}}/data"
+influxdb_data_dir: "{{ influxdb_base_data_dir }}/data"
 influxdb_data_engine: "bz1"
 influxdb_max_wal_size: 104857600
 influxdb_wal_flush_interval: "10m"
 influxdb_wal_partition_flush_delay: "2s"
-influxdb_wal_dir: "{{influxdb_base_data_dir}}/wal"
+influxdb_wal_dir: "{{ influxdb_base_data_dir }}/wal"
 influxdb_wal_enable_logging: "true"
 influxdb_wal_ready_series_size: 25600
 influxdb_wal_compaction_threshold: 0.6
@@ -65,7 +65,7 @@ influxdb_query_log_enabled: "false"
 
 # [hinted-handoff]
 influxdb_hh_enabled: "true"
-influxdb_hh_dir: "{{influxdb_base_data_dir}}/hh"
+influxdb_hh_dir: "{{ influxdb_base_data_dir }}/hh"
 influxdb_hh_max_size: 1073741824
 influxdb_hh_max_age: "168h"
 influxdb_hh_retry_rate_limit: 0

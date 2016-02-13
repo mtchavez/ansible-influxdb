@@ -2,15 +2,15 @@
 
 - name: Create influxdb group
   group:
-    name: "{{influxdb_group}}"
+    name: "{{ influxdb_group }}"
     state: present
   tags:
     - influxdb
 
 - name: Create influxdb user
   user:
-    name: "{{influxdb_user}}"
-    group: "{{influxdb_group}}"
+    name: "{{ influxdb_user }}"
+    group: "{{ influxdb_group }}"
     state: present
   tags:
     - influxdb
@@ -18,13 +18,13 @@
 # TODO: Use md5sum to check download
 - name: Download version
   get_url:
-    url: "{{influxdb_dl_url}}"
-    dest: "{{influxdb_pkg}}"
+    url: "{{ influxdb_dl_url }}"
+    dest: "{{ influxdb_pkg }}"
   tags:
     - influxdb
 
 - name: Install package
-  command: "dpkg --skip-same-version -i {{influxdb_pkg}}"
+  command: "dpkg --skip-same-version -i {{ influxdb_pkg }}"
   register: dpkg_result
   changed_when: "dpkg_result.stdout.startswith('Selecting')"
   when: ansible_distribution in ['Ubuntu', 'Debian']
@@ -33,55 +33,55 @@
 
 - name: Create data dir
   file:
-    path: "{{influxdb_data_dir}}"
+    path: "{{ influxdb_data_dir }}"
     state: directory
-    group: "{{influxdb_group}}"
-    owner: "{{influxdb_user}}"
+    group: "{{ influxdb_group }}"
+    owner: "{{ influxdb_user }}"
   tags:
     - influxdb
 
 - name: Create meta dir
   file:
-    path: "{{influxdb_meta_dir}}"
+    path: "{{ influxdb_meta_dir }}"
     state: directory
-    group: "{{influxdb_group}}"
-    owner: "{{influxdb_user}}"
+    group: "{{ influxdb_group }}"
+    owner: "{{ influxdb_user }}"
   tags:
     - influxdb
 
 - name: Create hh dir
   file:
-    path: "{{influxdb_hh_dir}}"
+    path: "{{ influxdb_hh_dir }}"
     state: directory
-    group: "{{influxdb_group}}"
-    owner: "{{influxdb_user}}"
+    group: "{{ influxdb_group }}"
+    owner: "{{ influxdb_user }}"
   tags:
     - influxdb
 
 - name: Create wal dir
   file:
-    path: "{{influxdb_wal_dir}}"
+    path: "{{ influxdb_wal_dir }}"
     state: directory
-    group: "{{influxdb_group}}"
-    owner: "{{influxdb_user}}"
+    group: "{{ influxdb_group }}"
+    owner: "{{ influxdb_user }}"
   tags:
     - influxdb
 
 - name: Create config directory
   file:
-    path: "{{influxdb_config_dir}}"
+    path: "{{ influxdb_config_dir }}"
     state: directory
-    group: "{{influxdb_group}}"
-    owner: "{{influxdb_user}}"
+    group: "{{ influxdb_group }}"
+    owner: "{{ influxdb_user }}"
   tags:
     - influxdb
 
 - name: Write config
   template:
     src: conf.j2
-    dest: "{{influxdb_generated_config}}"
-    group: "{{influxdb_group}}"
-    owner: "{{influxdb_user}}"
+    dest: "{{ influxdb_generated_config }}"
+    group: "{{ influxdb_group }}"
+    owner: "{{ influxdb_user }}"
   register: write_config
   notify:
     - restart influxdb
@@ -91,7 +91,7 @@
 # TODO: Find out why this doesn't work
 # TODO: Update to use Ansible 2.0 run as instead of sudo
 - name: Run config update
-  command: "sudo {{influxdb_influxd_bin}} config -config {{influxdb_generated_config}}"
+  command: "sudo {{ influxdb_influxd_bin }} config -config {{ influxdb_generated_config }}"
   register: influxdb_merged_config
   when: write_config | changed
   tags:
@@ -99,25 +99,25 @@
 
 - name: Write merged config
   copy:
-    content: "{{influxdb_merged_config.stdout}}"
-    dest: "{{influxdb_config_file}}"
-    group: "{{influxdb_group}}"
-    owner: "{{influxdb_user}}"
+    content: "{{ influxdb_merged_config.stdout }}"
+    dest: "{{ influxdb_config_file }}"
+    group: "{{ influxdb_group }}"
+    owner: "{{ influxdb_user }}"
   when: influxdb_merged_config | changed
   tags:
     - influxdb
 
 - name: Ensure directories have correct permissions
   file:
-    path: "{{item }}"
-    owner: "{{influxdb_user}}"
-    group: "{{influxdb_group}}"
+    path: "{{ item  }}"
+    owner: "{{ influxdb_user }}"
+    group: "{{ influxdb_group }}"
     recurse: yes
   with_items:
-    - "{{influxdb_meta_dir}}"
-    - "{{influxdb_data_dir}}"
-    - "{{influxdb_hh_dir}}"
-    - "{{influxdb_wal_dir}}"
+    - "{{ influxdb_meta_dir }}"
+    - "{{ influxdb_data_dir }}"
+    - "{{ influxdb_hh_dir }}"
+    - "{{ influxdb_wal_dir }}"
   tags:
     - influxdb
 

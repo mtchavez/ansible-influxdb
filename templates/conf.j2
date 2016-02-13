@@ -10,7 +10,7 @@
 # to track the number of instances running and the versions, which
 # is very helpful for us.
 # Change this option to true to disable reporting.
-reporting-disabled = {{influxdb_reporting_disabled}}
+reporting-disabled = {{ influxdb_reporting_disabled }}
 
 ###
 ### Enterprise registration control
@@ -29,14 +29,14 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ###
 
 [meta]
-  dir = "{{influxdb_meta_dir}}"
-  hostname = "{{influxdb_hostname}}"
-  bind-address = "{{influxdb_bind_address}}"
-  retention-autocreate = {{influxdb_retention_autocreate}}
-  election-timeout = "{{influxdb_election_timeout}}"
-  heartbeat-timeout = "{{influxdb_heartbeat_timeout}}"
-  leader-lease-timeout = "{{influxdb_leader_lease_timeout}}"
-  commit-timeout = "{{influxdb_commit_timeout}}"
+  dir = "{{ influxdb_meta_dir }}"
+  hostname = "{{ influxdb_hostname }}"
+  bind-address = "{{ influxdb_bind_address }}"
+  retention-autocreate = {{ influxdb_retention_autocreate }}
+  election-timeout = "{{ influxdb_election_timeout }}"
+  heartbeat-timeout = "{{ influxdb_heartbeat_timeout }}"
+  leader-lease-timeout = "{{ influxdb_leader_lease_timeout }}"
+  commit-timeout = "{{ influxdb_commit_timeout }}"
 
 ###
 ### [data]
@@ -48,48 +48,48 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ###
 
 [data]
-  dir = "{{influxdb_data_dir}}"
+  dir = "{{ influxdb_data_dir }}"
 
   # Controls the engine type for new shards. Options are b1, bz1, or tsm1.
   # b1 is the 0.9.2 storage engine, bz1 is the 0.9.3 and 0.9.4 engine.
   # tsm1 is the 0.9.5 engine and is currenly EXPERIMENTAL. Until 0.9.5 is
   # actually released data written into a tsm1 engine may be need to be wiped
   # between upgrades.
-  engine ="{{influxdb_data_engine}}"
+  engine ="{{ influxdb_data_engine }}"
 
   # The following WAL settings are for the b1 storage engine used in 0.9.2. They won't
   # apply to any new shards created after upgrading to a version > 0.9.3.
   max-wal-size = 104857600 # Maximum size the WAL can reach before a flush. Defaults to 100MB.
-  wal-flush-interval = "{{influxdb_wal_flush_interval}}" # Maximum time data can sit in WAL before a flush.
-  wal-partition-flush-delay = "{{influxdb_wal_partition_flush_delay}}" # The delay time between each WAL partition being flushed.
+  wal-flush-interval = "{{ influxdb_wal_flush_interval }}" # Maximum time data can sit in WAL before a flush.
+  wal-partition-flush-delay = "{{ influxdb_wal_partition_flush_delay }}" # The delay time between each WAL partition being flushed.
 
   # These are the WAL settings for the storage engine >= 0.9.3
-  wal-dir = "{{influxdb_wal_dir}}"
-  wal-enable-logging = {{influxdb_wal_enable_logging}}
+  wal-dir = "{{ influxdb_wal_dir }}"
+  wal-enable-logging = {{ influxdb_wal_enable_logging }}
 
   # When a series in the WAL in-memory cache reaches this size in bytes it is marked as ready to
   # flush to the index
-  wal-ready-series-size = {{influxdb_wal_ready_series_size}}
+  wal-ready-series-size = {{ influxdb_wal_ready_series_size }}
 
   # Flush and compact a partition once this ratio of series are over the ready size
-  wal-compaction-threshold = {{influxdb_wal_compaction_threshold}}
+  wal-compaction-threshold = {{ influxdb_wal_compaction_threshold }}
 
   # Force a flush and compaction if any series in a partition gets above this size in bytes
-  wal-max-series-size = {{influxdb_wal_max_series_size}}
+  wal-max-series-size = {{ influxdb_wal_max_series_size }}
 
   # Force a flush of all series and full compaction if there have been no writes in this
   # amount of time. This is useful for ensuring that shards that are cold for writes don't
   # keep a bunch of data cached in memory and in the WAL.
-  wal-flush-cold-interval = "{{influxdb_wal_flush_cold_interval}}"
+  wal-flush-cold-interval = "{{ influxdb_wal_flush_cold_interval }}"
 
   # Force a partition to flush its largest series if it reaches this approximate size in
   # bytes. Remember there are 5 partitions so you'll need at least 5x this amount of memory.
   # The more memory you have, the bigger this can be.
-  wal-partition-size-threshold = {{influxdb_wal_partition_size_threshold}}
+  wal-partition-size-threshold = {{ influxdb_wal_partition_size_threshold }}
 
   # Whether queries should be logged before execution. Very useful for troubleshooting, but will
   # log any sensitive data contained within a query.
-  query-log-enabled = {{influxdb_query_log_enabled}}
+  query-log-enabled = {{ influxdb_query_log_enabled }}
 
 ###
 ### [hinted-handoff]
@@ -100,24 +100,24 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ###
 
 [hinted-handoff]
-  enabled = {{influxdb_hh_enabled}}
-  dir = "{{influxdb_hh_dir}}"
-  max-size = {{influxdb_hh_max_size}}
-  max-age = "{{influxdb_hh_max_age}}"
-  retry-rate-limit = {{influxdb_hh_retry_rate_limit}}
+  enabled = {{ influxdb_hh_enabled }}
+  dir = "{{ influxdb_hh_dir }}"
+  max-size = {{ influxdb_hh_max_size }}
+  max-age = "{{ influxdb_hh_max_age }}"
+  retry-rate-limit = {{ influxdb_hh_retry_rate_limit }}
 
   # Hinted handoff will start retrying writes to down nodes at a rate of once per second.
   # If any error occurs, it will backoff in an exponential manner, until the interval
   # reaches retry-max-interval. Once writes to all nodes are successfully completed the
   # interval will reset to retry-interval.
-  retry-interval = "{{influxdb_hh_retry_interval}}"
-  retry-max-interval = "{{influxdb_hh_retry_max_interval}}"
+  retry-interval = "{{ influxdb_hh_retry_interval }}"
+  retry-max-interval = "{{ influxdb_hh_retry_max_interval }}"
 
   # Interval between running checks for data that should be purged. Data is purged from
   # hinted-handoff queues for two reasons. 1) The data is older than the max age, or
   # 2) the target node has been dropped from the cluster. Data is never dropped until
   # it has reached max-age however, for a dropped node or not.
-  purge-interval = "{{influxdb_hh_purge_interval}}"
+  purge-interval = "{{ influxdb_hh_purge_interval }}"
 
 ###
 ### [cluster]
@@ -127,8 +127,8 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ###
 
 [cluster]
-  shard-writer-timeout = "{{influxdb_cluster_shard_writer_timeout}}" # The time within which a shard must respond to write.
-  write-timeout = "{{influxdb_cluster_write_timeout}}" # The time within which a write operation must complete on the cluster.
+  shard-writer-timeout = "{{ influxdb_cluster_shard_writer_timeout }}" # The time within which a shard must respond to write.
+  write-timeout = "{{ influxdb_cluster_write_timeout }}" # The time within which a write operation must complete on the cluster.
 
 ###
 ### [retention]
@@ -137,8 +137,8 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ###
 
 [retention]
-  enabled = {{influxdb_retention_enabled}}
-  check-interval = "{{influxdb_retention_check_interval}}"
+  enabled = {{ influxdb_retention_enabled }}
+  check-interval = "{{ influxdb_retention_check_interval }}"
 
 ###
 ### [shard-precreation]
@@ -147,9 +147,9 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ### Only shards that will exist in the future, at time of creation, are precreated.
 
 [shard-precreation]
-  enabled = {{influxdb_shard_creation_enabled}}
-  check-interval = "{{influxdb_shard_creation_check_interval}}"
-  advance-period = "{{influxdb_shard_creation_advance_period}}"
+  enabled = {{ influxdb_shard_creation_enabled }}
+  check-interval = "{{ influxdb_shard_creation_check_interval }}"
+  advance-period = "{{ influxdb_shard_creation_advance_period }}"
 
 ###
 ### Controls the system self-monitoring, statistics and diagnostics.
@@ -161,9 +161,9 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ### this retention policy is configured as the default for the database.
 
 [monitor]
-  store-enabled = {{influxdb_monitor_store_enabled}} # Whether to record statistics internally.
-  store-database = "{{influxdb_monitor_store_database}}" # The destination database for recorded statistics
-  store-interval = "{{influxdb_monitor_store_interval}}" # The interval at which to record statistics
+  store-enabled = {{ influxdb_monitor_store_enabled }} # Whether to record statistics internally.
+  store-database = "{{ influxdb_monitor_store_database }}" # The destination database for recorded statistics
+  store-interval = "{{ influxdb_monitor_store_interval }}" # The interval at which to record statistics
 
 ###
 ### [admin]
@@ -173,10 +173,10 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ###
 
 [admin]
-  enabled = {{influxdb_admin_enabled}}
-  bind-address = "{{influxdb_admin_bind_address}}"
-  https-enabled = {{influxdb_admin_https_enabled}}
-  https-certificate = "{{influxdb_admin_https_certificate}}"
+  enabled = {{ influxdb_admin_enabled }}
+  bind-address = "{{ influxdb_admin_bind_address }}"
+  https-enabled = {{ influxdb_admin_https_enabled }}
+  https-certificate = "{{ influxdb_admin_https_certificate }}"
 
 ###
 ### [http]
@@ -186,14 +186,14 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ###
 
 [http]
-  enabled = {{influxdb_http_enabled}}
-  bind-address = "{{influxdb_http_bind_address}}"
-  auth-enabled = {{influxdb_http_auth_enabled}}
-  log-enabled = {{influxdb_http_log_enabled}}
-  write-tracing = {{influxdb_http_write_tracing}}
-  pprof-enabled = {{influxdb_http_pprof_enabled}}
-  https-enabled = {{influxdb_http_https_enabled}}
-  https-certificate = "{{influxdb_http_https_certificate}}"
+  enabled = {{ influxdb_http_enabled }}
+  bind-address = "{{ influxdb_http_bind_address }}"
+  auth-enabled = {{ influxdb_http_auth_enabled }}
+  log-enabled = {{ influxdb_http_log_enabled }}
+  write-tracing = {{ influxdb_http_write_tracing }}
+  pprof-enabled = {{ influxdb_http_pprof_enabled }}
+  https-enabled = {{ influxdb_http_https_enabled }}
+  https-certificate = "{{ influxdb_http_https_certificate }}"
 
 ###
 ### [[graphite]]
@@ -202,21 +202,21 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ###
 
 [[graphite]]
-  enabled = {{influxdb_graphite_enabled}}
+  enabled = {{ influxdb_graphite_enabled }}
   {% if influxdb_graphite_enabled == "true" %}
-  database = "{{influxdb_graphite_database}}"
-  bind-address = "{{influxdb_graphite_bind_address}}"
-  protocol = "{{influxdb_graphite_protocol}}"
-  consistency-level = "{{influxdb_graphite_consistency_level}}"
-  name-separator = "{{influxdb_graphite_name_separator}}"
+  database = "{{ influxdb_graphite_database }}"
+  bind-address = "{{ influxdb_graphite_bind_address }}"
+  protocol = "{{ influxdb_graphite_protocol }}"
+  consistency-level = "{{ influxdb_graphite_consistency_level }}"
+  name-separator = "{{ influxdb_graphite_name_separator }}"
 
   # These next lines control how batching works. You should have this enabled
   # otherwise you could get dropped metrics or poor performance. Batching
   # will buffer points in memory if you have many coming in.
 
-  batch-size = {{influxdb_graphite_batch_size}} # will flush if this many points get buffered
-  batch-pending = {{influxdb_graphite_batch_pending}} # number of batches that may be pending in memory
-  batch-timeout = "{{influxdb_graphite_batch_timeout}}" # will flush at least this often even if we haven't hit buffer limit
+  batch-size = {{ influxdb_graphite_batch_size }} # will flush if this many points get buffered
+  batch-pending = {{ influxdb_graphite_batch_pending }} # number of batches that may be pending in memory
+  batch-timeout = "{{ influxdb_graphite_batch_timeout }}" # will flush at least this often even if we haven't hit buffer limit
 
   ## "name-schema" configures tag names for parsing the metric name from graphite protocol;
   ## separated by `name-separator`.
@@ -231,12 +231,12 @@ reporting-disabled = {{influxdb_reporting_disabled}}
   ##         "device": "cpu0"
   ##     }
   ## }
-  name-schema = "{{influxdb_graphite_name_schema}}"
+  name-schema = "{{ influxdb_graphite_name_schema }}"
 
   ## If set to true, when the input metric name has more fields than `name-schema` specified,
   ## the extra fields will be ignored.
   ## Otherwise an error will be logged and the metric rejected.
-  ignore-unnamed = {{influxdb_graphite_ignore_unnamed}}
+  ignore-unnamed = {{ influxdb_graphite_ignore_unnamed }}
   {% endif %}
 
 ###
@@ -246,19 +246,19 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ###
 
 [collectd]
-  enabled = {{influxdb_collectd_enabled}}
+  enabled = {{ influxdb_collectd_enabled }}
   {% if influxdb_collectd_enabled == "true" %}
-  bind-address = "{{influxdb_collectd_bind_address}}"
-  database = "{{influxdb_collectd_database}}"
-  typesdb = "{{influxdb_collectd_typesdb}}"
+  bind-address = "{{ influxdb_collectd_bind_address }}"
+  database = "{{ influxdb_collectd_database }}"
+  typesdb = "{{ influxdb_collectd_typesdb }}"
 
   # These next lines control how batching works. You should have this enabled
   # otherwise you could get dropped metrics or poor performance. Batching
   # will buffer points in memory if you have many coming in.
 
-  batch-size = {{influxdb_collectd_batch_size}} # will flush if this many points get buffered
-  batch-pending = {{influxdb_collectd_batch_pending}} # number of batches that may be pending in memory
-  batch-timeout = "{{influxdb_collectd_batch_timeout}}" # will flush at least this often even if we haven't hit buffer limit
+  batch-size = {{ influxdb_collectd_batch_size }} # will flush if this many points get buffered
+  batch-pending = {{ influxdb_collectd_batch_pending }} # number of batches that may be pending in memory
+  batch-timeout = "{{ influxdb_collectd_batch_timeout }}" # will flush at least this often even if we haven't hit buffer limit
   {% endif %}
 
 ###
@@ -268,22 +268,22 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ###
 
 [opentsdb]
-  enabled = {{influxdb_tsb_enabled}}
+  enabled = {{ influxdb_tsb_enabled }}
   {% if influxdb_tsb_enabled == "true" %}
-  bind-address = "{{influxdb_tsb_bind_address}}"
-  database = "{{influxdb_tsb_database}}"
-  retention-policy = "{{influxdb_tsb_retention_policy}}"
-  consistency-level = "{{influxdb_tsb_consistency_level}}"
-  tls-enabled = {{influxdb_tsb_tls_enabled}}
-  certificate = "{{influxdb_tsb_certificate}}"
+  bind-address = "{{ influxdb_tsb_bind_address }}"
+  database = "{{ influxdb_tsb_database }}"
+  retention-policy = "{{ influxdb_tsb_retention_policy }}"
+  consistency-level = "{{ influxdb_tsb_consistency_level }}"
+  tls-enabled = {{ influxdb_tsb_tls_enabled }}
+  certificate = "{{ influxdb_tsb_certificate }}"
 
   # These next lines control how batching works. You should have this enabled
   # otherwise you could get dropped metrics or poor performance. Only points
   # metrics received over the telnet protocol undergo batching.
 
-  batch-size = {{influxdb_tsb_batch_size}} # will flush if this many points get buffered
-  batch-pending = {{influxdb_tsb_batch_pending}} # number of batches that may be pending in memory
-  batch-timeout = "{{influxdb_tsb_batch_timeout}}" # will flush at least this often even if we haven't hit buffer limit
+  batch-size = {{ influxdb_tsb_batch_size }} # will flush if this many points get buffered
+  batch-pending = {{ influxdb_tsb_batch_pending }} # number of batches that may be pending in memory
+  batch-timeout = "{{ influxdb_tsb_batch_timeout }}" # will flush at least this often even if we haven't hit buffer limit
   {% endif %}
 
 ###
@@ -293,19 +293,19 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ###
 
 [[udp]]
-  enabled = {{influxdb_udp_enabled}}
+  enabled = {{ influxdb_udp_enabled }}
   {% if influxdb_udp_enabled == "true" %}
-  bind-address = "{{influxdb_udp_bind_address}}"
-  database = "{{influxdb_udp_database}}"
-  retention-policy = "{{influxdb_udp_retention_policy}}"
+  bind-address = "{{ influxdb_udp_bind_address }}"
+  database = "{{ influxdb_udp_database }}"
+  retention-policy = "{{ influxdb_udp_retention_policy }}"
 
   # These next lines control how batching works. You should have this enabled
   # otherwise you could get dropped metrics or poor performance. Batching
   # will buffer points in memory if you have many coming in.
 
-  batch-size = {{influxdb_udp_batch_size}} # will flush if this many points get buffered
-  batch-pending = {{influxdb_udp_batch_pending}} # number of batches that may be pending in memory
-  batch-timeout = "{{influxdb_udp_batch_timeout}}" # will flush at least this often even if we haven't hit buffer limit
+  batch-size = {{ influxdb_udp_batch_size }} # will flush if this many points get buffered
+  batch-pending = {{ influxdb_udp_batch_pending }} # number of batches that may be pending in memory
+  batch-timeout = "{{ influxdb_udp_batch_timeout }}" # will flush at least this often even if we haven't hit buffer limit
   {% endif %}
 
 ###
@@ -315,9 +315,9 @@ reporting-disabled = {{influxdb_reporting_disabled}}
 ###
 
 [continuous_queries]
-  log-enabled = {{influxdb_cqueries_log_enabled}}
-  enabled = {{influxdb_cqueries_enabled}}
-  recompute-previous-n = {{influxdb_cqueries_recompute_previous_n}}
-  recompute-no-older-than = "{{influxdb_cqueries_recompute_no_older_than}}"
-  compute-runs-per-interval = {{influxdb_cqueries_compute_runs_per_interval}}
-  compute-no-more-than = "{{influxdb_cqueries_compute_no_more_than}}"
+  log-enabled = {{ influxdb_cqueries_log_enabled }}
+  enabled = {{ influxdb_cqueries_enabled }}
+  recompute-previous-n = {{ influxdb_cqueries_recompute_previous_n }}
+  recompute-no-older-than = "{{ influxdb_cqueries_recompute_no_older_than }}"
+  compute-runs-per-interval = {{ influxdb_cqueries_compute_runs_per_interval }}
+  compute-no-more-than = "{{ influxdb_cqueries_compute_no_more_than }}"

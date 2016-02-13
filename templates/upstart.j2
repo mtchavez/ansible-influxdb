@@ -10,6 +10,6 @@ limit nofile unlimited unlimited
 
 console log
 
-env GOMAXPROCS={{influxdb_maxprocs}}
+env GOMAXPROCS={{ influxdb_maxprocs }}
 
-exec sudo su -u {{influxdb_user}} -c "usr/bin/influxdb -config={{influxdb_config_file}}"
+exec sudo su -u {{ influxdb_user }} -c "usr/bin/influxdb -config={{ influxdb_config_file }}"

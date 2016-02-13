@@ -23,22 +23,22 @@
 DEFAULT=/etc/default/influxdb
 
 # Daemon options
-INFLUXD_OPTS="{{influxdb_influxd_opts}}"
+INFLUXD_OPTS="{{ influxdb_influxd_opts }}"
 
 # Process name ( For display )
 NAME=influxdb
 
 # User and group
-USER={{influxdb_user}}
-GROUP={{influxdb_group}}
+USER={{ influxdb_user }}
+GROUP={{ influxdb_group }}
 
 # Daemon name, where is the actual executable
 # If the daemon is not there, then exit.
-DAEMON={{influxdb_influxd_bin}}
+DAEMON={{ influxdb_influxd_bin }}
 [ -x $DAEMON ] || exit 5
 
 # Configuration file
-CONFIG={{influxdb_config_file}}
+CONFIG={{ influxdb_config_file }}
 
 # PID file for the daemon
 PIDFILE=/var/run/influxdb/influxd.pid
