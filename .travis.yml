@@ -1,22 +1,13 @@
 ---
-language: python
-python: "2.7"
+
+language: ruby
+rvm:
+  - 2.2.3
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -qq python-apt python-pycurl
+  - "curl -fsSL https://get.docker.com/ | sh"
+  - sudo usermod -aG docker travis
 install:
-  - pip install ansible
+  - bundle install --jobs=4
 script:
-  - echo "localhost" > inventory
-  - ansible-playbook -i inventory --syntax-check --list-tasks role.yml
-  - ansible-playbook --connection=local -i inventory role.yml
-  - ansible-playbook --connection=local -i inventory role.yml | grep -q 'changed=0.*failed=0'
-  - echo "Wait for influxdb to come up..." && sleep 10
-  - ps aux | grep -v grep | grep influxdb
-  - netstat -ntlp | grep 8088
-  - netstat -ntlp | grep 8086
-  - netstat -ntlp | grep 8083
-  - curl -o /dev/null http://localhost:8083
-  - curl -G http://localhost:8086/query --data-urlencode "q=CREATE DATABASE testdb"
-  - curl -i -XPOST 'http://localhost:8086/write?db=testdb' --data-binary 'cpu_load_short,host=server01,region=us-west value=0.64 1434055562000000000'
-  - curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=testdb" --data-urlencode "q=SELECT value FROM cpu_load_short WHERE region='us-west'"
+  - bundle exec kitchen test
