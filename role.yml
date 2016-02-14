@@ -3,6 +3,8 @@
 - name: Test influxdb
   hosts: all
   sudo: yes
+  roles:
+    - ""
   vars_files:
     - "defaults/main.yml"
     - "vars/main.yml"

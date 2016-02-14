@@ -1,0 +1,21 @@
+---
+
+driver:
+  name: docker
+
+provisioner:
+  name: ansible_playbook
+  playbook: role.yml
+  additional_copy_path:
+    - "."
+
+platforms:
+  - name: "ubuntu-14.04"
+
+verifier:
+  name: busser
+  plugin:
+    - Ansiblespec
+
+suites:
+  - name: default
