@@ -3,12 +3,6 @@
 driver:
   name: docker
 
-provisioner:
-  name: ansible_playbook
-  playbook: role.yml
-  additional_copy_path:
-    - "."
-
 platforms:
   - name: "ubuntu-14.04"
 
@@ -19,3 +13,20 @@ verifier:
 
 suites:
   - name: default
+    provisioner:
+      name: ansible_playbook
+      playbook: role.yml
+      ansible_extra_flags: <%= ENV['ANSIBLE_EXTRA_FLAGS'] %>
+      additional_copy_path:
+        - "."
+
+suites:
+  - name: collectd
+    provisioner:
+      name: ansible_playbook
+      playbook: role.yml
+      extra_vars:
+        influxdb_collectd_enabled: "true"
+      additional_copy_path:
+        - "."
+

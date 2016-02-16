@@ -15,6 +15,10 @@
   tags:
     - influxdb
 
+- name: Configure collectd
+  include: collectd.yml
+  when: influxdb_collectd_enabled == "true"
+
 # TODO: Use md5sum to check download
 - name: Download version
   get_url:
