@@ -16,6 +16,8 @@ influxdb_base_data_dir: "/var/lib/influxdb"
 influxdb_influxd_bin: "/usr/bin/influxd"
 influxdb_scripts_dir: "/usr/lib/influxdb/scripts"
 influxdb_influxd_opts: ""
+influxdb_collectd_typesdb_url: "https://raw.githubusercontent.com/collectd/collectd/master/src/types.db"
+influxdb_collectd_typesdb_directory: "/usr/share/collectd"
 
 #
 # Config

@@ -19,6 +19,9 @@ Role Variables
 Variables are mostly what exists in the InfluxDB config file. Which you can see [here](https://raw.githubusercontent.com/influxdb/influxdb/master/etc/config.sample.toml)
 
 ```
+influxdb_collectd_typesdb_url: "https://raw.githubusercontent.com/collectd/collectd/master/src/types.db"
+influxdb_collectd_typesdb_directory: "/usr/share/collectd"
+
 #
 # Config
 #
@@ -29,14 +32,6 @@ influxdb_reporting_disabled: "false"
 influxdb_base_data_dir: "/var/lib/influxdb"
 influxdb_influxd_bin: "/usr/bin/influxd"
 influxdb_scripts_dir: "/usr/lib/influxdb/scripts"
-
-#
-# Config
-#
-influxdb_config_dir: "/etc/influxdb"
-influxdb_config_file: "{{ influxdb_config_dir }}/influxdb.conf"
-influxdb_generated_config: "{{ influxdb_config_dir }}/influxdb.generated.conf"
-influxdb_reporting_disabled: "false"
 
 # [meta]
 influxdb_meta_dir: "{{ influxdb_base_data_dir }}/meta"

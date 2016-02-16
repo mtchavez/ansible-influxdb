@@ -1,0 +1,21 @@
+- name: Create collectd typesdb if needed
+  file:
+    path: "{{ influxdb_collectd_typesdb_directory }}"
+    state: directory
+  tags:
+    - influxdb
+
+- name: Check collectd types.db existence
+  stat:
+    path: "{{ influxdb_collectd_typesdb_directory }}/types.db"
+  register: influxdb_collectd_typesdb
+  tags:
+    - influxdb
+
+- name: Get collectd types.db from github
+  get_url:
+    url: "{{ influxdb_collectd_typesdb_url }}"
+    dest: "{{ influxdb_collectd_typesdb_directory }}/types.db"
+  when: not influxdb_collectd_typesdb.stat.exists
+  tags:
+    - influxdb

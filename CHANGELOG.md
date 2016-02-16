@@ -1,3 +1,9 @@
+# Unreleased
+
+* Test Kitchen setup and integration
+* Updates to role for open source role conventions
+* Collectd setup when enabled
+
 # v3.0.1 – 2015-11-11
 
 * Fix config merging
