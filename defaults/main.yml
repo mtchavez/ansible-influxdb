@@ -3,6 +3,7 @@
 influxdb_ver: "0.9.6.1"
 influxdb_checksums:
   0_9_6_1: "bd13fc5f21ec7f598b603f2a19b4005f"
+  0_10_3_1: "96244557d9bb7485ddc9d084ff7ce783"
 influxdb_arch: "amd64"
 influxdb_dl_url: "https://s3.amazonaws.com/influxdb/influxdb_{{  influxdb_ver  }}_{{  influxdb_arch  }}.deb"
 influxdb_pkg: "/usr/local/src/influxdb_{{  influxdb_ver  }}_{{  influxdb_arch  }}.deb"
@@ -28,6 +29,7 @@ influxdb_generated_config: "{{ influxdb_config_dir }}/influxdb.generated.conf"
 influxdb_reporting_disabled: "false"
 
 # [meta]
+influxdb_meta_enabled: "true"
 influxdb_meta_dir: "{{ influxdb_base_data_dir }}/meta"
 influxdb_hostname: "localhost"
 influxdb_bind_address: ":8088"
@@ -38,6 +40,7 @@ influxdb_leader_lease_timeout: "500ms"
 influxdb_commit_timeout: "50ms"
 
 # [data]
+influxdb_data_enabled: "true"
 influxdb_data_dir: "{{ influxdb_base_data_dir }}/data"
 influxdb_data_engine: "bz1"
 influxdb_max_wal_size: 104857600
@@ -45,12 +48,19 @@ influxdb_wal_flush_interval: "10m"
 influxdb_wal_partition_flush_delay: "2s"
 influxdb_wal_dir: "{{ influxdb_base_data_dir }}/wal"
 influxdb_wal_enable_logging: "true"
+influxdb_data_enable_logging: "true"
 influxdb_wal_ready_series_size: 25600
 influxdb_wal_compaction_threshold: 0.6
 influxdb_wal_max_series_size: 2097152
 influxdb_wal_flush_cold_interval: "10m"
 influxdb_wal_partition_size_threshold: 20971520
 influxdb_query_log_enabled: "false"
+influxdb_cache_snapshot_memory_size: 524288000
+influxdb_cache_snapshot_memory_size: 26214400
+influxdb_cache_snapshot_write_cold_curation: "1h"
+influxdb_compact_min_file_count: 3
+influxdb_compact_full_write_cold_duration: "24h"
+influxdb_max_points_per_block: 1000
 
 # [hinted-handoff]
 influxdb_hh_enabled: "true"
@@ -63,8 +73,8 @@ influxdb_hh_retry_max_interval: "1m"
 influxdb_hh_purge_interval: "1h"
 
 # [cluster]
-influxdb_cluster_shard_writer_timeout: "10s"
-influxdb_cluster_write_timeout: "5s"
+influxdb_cluster_shard_writer_timeout: "5s"
+influxdb_cluster_write_timeout: "10s"
 
 # [retention]
 influxdb_retention_enabled: "true"
@@ -117,6 +127,7 @@ influxdb_collectd_typesdb: "/usr/share/collectd/types.db"
 influxdb_collectd_batch_size: 1000
 influxdb_collectd_batch_pending: 5
 influxdb_collectd_batch_timeout: "1s"
+influxdb_collectd_read_buffer: 0
 
 # [opentsdb]
 influxdb_tsb_enabled: "false"
@@ -126,6 +137,7 @@ influxdb_tsb_retention_policy: ""
 influxdb_tsb_consistency_level: "one"
 influxdb_tsb_tls_enabled: "false"
 influxdb_tsb_certificate: ""
+influxdb_tsb_log_point_errors: "true"
 influxdb_tsb_batch_size: 1000
 influxdb_tsb_batch_pending: 5
 influxdb_tsb_batch_timeout: "1s"
@@ -138,10 +150,12 @@ influxdb_udp_retention_policy: ""
 influxdb_udp_batch_size: 1000
 influxdb_udp_batch_pending: 5
 influxdb_udp_batch_timeout: "1s"
+influxdb_udp_read_buffer: 0
 
 # [continuous_queries]
 influxdb_cqueries_log_enabled: "true"
 influxdb_cqueries_enabled: "true"
+influxdv_cqueries_run_interval: "1s"
 influxdb_cqueries_recompute_previous_n: 2
 influxdb_cqueries_recompute_no_older_than: "10m"
 influxdb_cqueries_compute_runs_per_interval: 10
