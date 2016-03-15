@@ -87,7 +87,7 @@ influxdb_shard_creation_advance_period: "30m"
 # [monitor]
 influxdb_monitor_store_enabled: "true"
 influxdb_monitor_store_database: "_internal"
-influxdb_monitor_stoe_interval: "10s"
+influxdb_monitor_store_interval: "10s"
 
 # [admin]
 influxdb_admin_enabled: "true"
