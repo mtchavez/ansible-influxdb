@@ -30,7 +30,7 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
 
 [meta]
   # Controls if this node should run the metaservice and participate in the Raft group
-  enabled = "{{ influxdb_meta_enabled }}"
+  enabled = {{ influxdb_meta_enabled }}
   {% if influxdb_meta_enabled == "true" %}
 
   # Where the metadata/raft database is stored
@@ -56,7 +56,7 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
 
 [data]
 # Controls if this node holds time series data shards in the cluster
-  enabled = "{{ influxdb_data_enabled }}"
+  enabled = {{ influxdb_data_enabled }}
   {% if influxdb_data_enabled == "true" %}
 
   dir = "{{ influxdb_data_dir }}"
@@ -65,12 +65,12 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
   # apply to any new shards created after upgrading to a version > 0.9.3.
   max-wal-size = {{ influxdb_max_wal_size }} # Maximum size the WAL can reach before a flush. Defaults to 100MB.
   wal-flush-interval = "{{ influxdb_wal_flush_interval }}" # Maximum time data can sit in WAL before a flush.
-  wal-partition-flush-delay = " {{influxdb_wal_partition_flush_delay }}" # The delay time between each WAL partition being flushed.
+  wal-partition-flush-delay = "{{influxdb_wal_partition_flush_delay }}" # The delay time between each WAL partition being flushed.
 
   # These are the WAL settings for the storage engine >= 0.9.3
   wal-dir = "{{ influxdb_wal_dir }}"
-  wal-logging-enabled = "{{ influxdb_wal_enable_logging }}"
-  data-logging-enabled = "{{ influxdb_data_enable_logging }}"
+  wal-logging-enabled = {{ influxdb_wal_enable_logging }}
+  data-logging-enabled = {{ influxdb_data_enable_logging }}
 
   # When a series in the WAL in-memory cache reaches this size in bytes it is marked as ready to
   # flush to the index
@@ -94,7 +94,7 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
 
   # Whether queries should be logged before execution. Very useful for troubleshooting, but will
   # log any sensitive data contained within a query.
-  query-log-enabled = "{{ influxdb_query_log_enabled }}"
+  query-log-enabled = {{ influxdb_query_log_enabled }}
 
   # Settings for the TSM engine
 
