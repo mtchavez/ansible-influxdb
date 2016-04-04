@@ -298,6 +298,7 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
   bind-address = "{{ influxdb_udp_bind_address }}"
   database = "{{ influxdb_udp_database }}"
   retention-policy = "{{ influxdb_udp_retention_policy }}"
+  read-buffer = {{influxdb_udp_read_buffer}}
 
   # These next lines control how batching works. You should have this enabled
   # otherwise you could get dropped metrics or poor performance. Batching
