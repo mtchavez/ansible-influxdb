@@ -138,6 +138,7 @@ influxdb_udp_retention_policy: ""
 influxdb_udp_batch_size: 1000
 influxdb_udp_batch_pending: 5
 influxdb_udp_batch_timeout: "1s"
+influxdb_udp_read_buffer: 0
 
 # [continuous_queries]
 influxdb_cqueries_log_enabled: "true"
