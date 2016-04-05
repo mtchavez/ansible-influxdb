@@ -1,20 +1,17 @@
-InfluxDB
-========
+# InfluxDB
 [![Latest Version](http://img.shields.io/github/release/mtchavez/ansible-influxdb.svg?style=flat-square)](https://github.com/mtchavez/ansible-influxdb/releases)
 [![Build Status](https://travis-ci.org/mtchavez/ansible-influxdb.svg?branch=master)](https://travis-ci.org/mtchavez/ansible-influxdb)
 
 InfluxDB Ansible Galaxy role. Sets up a working InfluxDB server.
-This role is for versions of InfluxDB >= `0.9.6` and is currently defaulted to `0.9.6.1`.
+This role is for versions of InfluxDB >= `0.11.1` and is currently defaulted to `0.11.1.1`.
 
 **Currenlty clustering is not taken into account for.**
 
-Requirements
-------------
+## Requirements
 
 Ansible version 1.6 and greater
 
-Role Variables
---------------
+## Role Variables
 
 Variables are mostly what exists in the InfluxDB config file. Which you can see [here](https://raw.githubusercontent.com/influxdb/influxdb/master/etc/config.sample.toml)
 
@@ -34,32 +31,44 @@ influxdb_influxd_bin: "/usr/bin/influxd"
 influxdb_scripts_dir: "/usr/lib/influxdb/scripts"
 
 # [meta]
+influxdb_meta_enabled: "true"
 influxdb_meta_dir: "{{ influxdb_base_data_dir }}/meta"
-influxdb_hostname: "localhost"
 influxdb_bind_address: ":8088"
+influxdb_meta_http_bind_address: ":8091"
 influxdb_retention_autocreate: "true"
 influxdb_election_timeout: "1s"
 influxdb_heartbeat_timeout: "1s"
 influxdb_leader_lease_timeout: "500ms"
 influxdb_commit_timeout: "50ms"
+influxdb_meta_logging_enabled: "true"
+influxdb_meta_pprof_enabled: "false"
+influxdb_meta_lease_duration: "1m0s"
 
 # [data]
+influxdb_data_enabled: "true"
 influxdb_data_dir: "{{ influxdb_base_data_dir }}/data"
-influxdb_data_engine: "bz1"
-influxdb_max_wal_size: 104857600
-influxdb_wal_flush_interval: "10m"
-influxdb_wal_partition_flush_delay: "2s"
+influxdb_data_logging_enabled: "true"
+influxdb_data_query_log_enabled: "true"
+influxdb_data_cache_max_memory_size: 524288000
+influxdb_data_cache_snapshot_memory_size: 26214400
+influxdb_data_cache_snapshot_write_cold_duration: "1h"
+influxdb_data_compact_min_file_count: 3
+influxdb_data_compact_full_write_cold_duration: "24h"
+influxdb_data_max_points_per_block: 1000
 influxdb_wal_dir: "{{ influxdb_base_data_dir }}/wal"
-influxdb_wal_enable_logging: "true"
-influxdb_wal_ready_series_size: 25600
-influxdb_wal_compaction_threshold: 0.6
-influxdb_wal_max_series_size: 2097152
-influxdb_wal_flush_cold_interval: "10m"
-influxdb_wal_partition_size_threshold: 20971520
-influxdb_query_log_enabled: "false"
+influxdb_wal_logging_enabled: "true"
+
+# [cluster]
+influxdb_cluster_shard_writer_timeout: "10s"
+influxdb_cluster_write_timeout: "5s"
+influxdb_cluster_max_concurrent_queries: 0
+influxdb_cluster_query_timeout: "0s"
+influxdb_cluster_max_select_point: 0
+influxdb_cluster_max_select_series: 0
+influxdb_cluster_max_select_buckets: 0
 
 # [hinted-handoff]
-influxdb_hh_enabled: "true"
+influxdb_hh_enabled: "false"
 influxdb_hh_dir: "{{ influxdb_base_data_dir }}/hh"
 influxdb_hh_max_size: 1073741824
 influxdb_hh_max_age: "168h"
@@ -67,10 +76,6 @@ influxdb_hh_retry_rate_limit: 0
 influxdb_hh_retry_interval: "1s"
 influxdb_hh_retry_max_interval: "1m"
 influxdb_hh_purge_interval: "1h"
-
-# [cluster]
-influxdb_cluster_shard_writer_timeout: "10s"
-influxdb_cluster_write_timeout: "5s"
 
 # [retention]
 influxdb_retention_enabled: "true"
@@ -108,12 +113,13 @@ influxdb_graphite_database: "graphite"
 influxdb_graphite_bind_address: ":2003"
 influxdb_graphite_protocol: "tcp"
 influxdb_graphite_consistency_level: "one"
-influxdb_graphite_name_separator: "."
+influxdb_graphite_separator: "."
+influxdb_graphite_udp_read_buffer: 0
 influxdb_graphite_batch_size: 1000
 influxdb_graphite_batch_pending: 5
 influxdb_graphite_batch_timeout: "1s"
-influxdb_graphite_name_schema: "type.host.measurement.device"
-influxdb_graphite_ignore_unnamed: "false"
+influxdb_graphite_templates:
+  - "type.host.measurement.device"
 
 # [collectd]
 influxdb_collectd_enabled: "false"
@@ -123,6 +129,7 @@ influxdb_collectd_typesdb: "/usr/share/collectd/types.db"
 influxdb_collectd_batch_size: 1000
 influxdb_collectd_batch_pending: 5
 influxdb_collectd_batch_timeout: "1s"
+influxdb_collectd_read_buffer: 0
 
 # [opentsdb]
 influxdb_tsb_enabled: "false"
@@ -135,6 +142,7 @@ influxdb_tsb_certificate: ""
 influxdb_tsb_batch_size: 1000
 influxdb_tsb_batch_pending: 5
 influxdb_tsb_batch_timeout: "1s"
+influxdb_tsb_log_point_errors: "true"
 
 # [[udp]]
 influxdb_udp_enabled: "false"
@@ -145,35 +153,29 @@ influxdb_udp_batch_size: 1000
 influxdb_udp_batch_pending: 5
 influxdb_udp_batch_timeout: "1s"
 influxdb_udp_read_buffer: 0
+influxdb_udp_payload_size: 65536
 
 # [continuous_queries]
 influxdb_cqueries_log_enabled: "true"
 influxdb_cqueries_enabled: "true"
-influxdb_cqueries_recompute_previous_n: 2
-influxdb_cqueries_recompute_no_older_than: "10m"
-influxdb_cqueries_compute_runs_per_interval: 10
-influxdb_cqueries_compute_no_more_than: "2m"
+influxdb_cqueries_run_interval: "1s"
 ```
 
-Dependencies
-------------
+## Dependencies
 
 No current dependencies on other Galaxy roles.
 
-Example Playbook
--------------------------
+## Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
     - hosts: servers
       roles:
          - influxdb
-License
--------
+## License
 
 BSD
 
-Author Information
-------------------
+## Author Information
 
 El Chavo - mtchavez - 2014

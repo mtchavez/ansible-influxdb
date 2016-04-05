@@ -12,14 +12,11 @@
 # Change this option to true to disable reporting.
 reporting-disabled = {{ influxdb_reporting_disabled }}
 
-###
-### Enterprise registration control
-###
-
-[registration]
-# enabled = true
-# url = "https://enterprise.influxdata.com" # The Enterprise server URL
-# token = "" # Registration token for Enterprise server
+# we'll try to get the hostname automatically, but if it the os returns something
+# that isn't resolvable by other servers in the cluster, use this option to
+# manually set the hostname
+# hostname = "localhost"
+hostname = "{{ influxdb_hostname }}"
 
 ###
 ### [meta]
@@ -29,14 +26,19 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
 ###
 
 [meta]
+  enabled = {{ influxdb_meta_enabled }}
   dir = "{{ influxdb_meta_dir }}"
   hostname = "{{ influxdb_hostname }}"
   bind-address = "{{ influxdb_bind_address }}"
+  http-bind-address = "{{ influxdb_meta_http_bind_address }}"
   retention-autocreate = {{ influxdb_retention_autocreate }}
   election-timeout = "{{ influxdb_election_timeout }}"
   heartbeat-timeout = "{{ influxdb_heartbeat_timeout }}"
   leader-lease-timeout = "{{ influxdb_leader_lease_timeout }}"
   commit-timeout = "{{ influxdb_commit_timeout }}"
+  logging-enabled = {{ influxdb_meta_logging_enabled }}
+  pprof-enabled = {{ influxdb_meta_pprof_enabled }}
+  lease-duration = "{{ influxdb_meta_lease_duration }}"
 
 ###
 ### [data]
@@ -48,48 +50,63 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
 ###
 
 [data]
+  # Controls if this node holds time series data shards in the cluster
+  enabled = {{ influxdb_data_enabled }}
   dir = "{{ influxdb_data_dir }}"
-
-  # Controls the engine type for new shards. Options are b1, bz1, or tsm1.
-  # b1 is the 0.9.2 storage engine, bz1 is the 0.9.3 and 0.9.4 engine.
-  # tsm1 is the 0.9.5 engine and is currenly EXPERIMENTAL. Until 0.9.5 is
-  # actually released data written into a tsm1 engine may be need to be wiped
-  # between upgrades.
-  engine ="{{ influxdb_data_engine }}"
-
-  # The following WAL settings are for the b1 storage engine used in 0.9.2. They won't
-  # apply to any new shards created after upgrading to a version > 0.9.3.
-  max-wal-size = 104857600 # Maximum size the WAL can reach before a flush. Defaults to 100MB.
-  wal-flush-interval = "{{ influxdb_wal_flush_interval }}" # Maximum time data can sit in WAL before a flush.
-  wal-partition-flush-delay = "{{ influxdb_wal_partition_flush_delay }}" # The delay time between each WAL partition being flushed.
 
   # These are the WAL settings for the storage engine >= 0.9.3
   wal-dir = "{{ influxdb_wal_dir }}"
-  wal-enable-logging = {{ influxdb_wal_enable_logging }}
-
-  # When a series in the WAL in-memory cache reaches this size in bytes it is marked as ready to
-  # flush to the index
-  wal-ready-series-size = {{ influxdb_wal_ready_series_size }}
-
-  # Flush and compact a partition once this ratio of series are over the ready size
-  wal-compaction-threshold = {{ influxdb_wal_compaction_threshold }}
-
-  # Force a flush and compaction if any series in a partition gets above this size in bytes
-  wal-max-series-size = {{ influxdb_wal_max_series_size }}
-
-  # Force a flush of all series and full compaction if there have been no writes in this
-  # amount of time. This is useful for ensuring that shards that are cold for writes don't
-  # keep a bunch of data cached in memory and in the WAL.
-  wal-flush-cold-interval = "{{ influxdb_wal_flush_cold_interval }}"
-
-  # Force a partition to flush its largest series if it reaches this approximate size in
-  # bytes. Remember there are 5 partitions so you'll need at least 5x this amount of memory.
-  # The more memory you have, the bigger this can be.
-  wal-partition-size-threshold = {{ influxdb_wal_partition_size_threshold }}
+  wal-logging-enabled = {{ influxdb_wal_logging_enabled }}
+  data-logging-enabled = {{ influxdb_data_logging_enabled }}
 
   # Whether queries should be logged before execution. Very useful for troubleshooting, but will
   # log any sensitive data contained within a query.
-  query-log-enabled = {{ influxdb_query_log_enabled }}
+  query-log-enabled = {{ influxdb_data_query_log_enabled }}
+
+  # Settings for the TSM engine
+
+  # CacheMaxMemorySize is the maximum size a shard's cache can
+  # reach before it starts rejecting writes.
+  cache-max-memory-size = {{ influxdb_data_cache_max_memory_size }}
+
+  # CacheSnapshotMemorySize is the size at which the engine will
+  # snapshot the cache and write it to a TSM file, freeing up memory
+  cache-snapshot-memory-size = {{ influxdb_data_cache_snapshot_memory_size }}
+
+  # CacheSnapshotWriteColdDuration is the length of time at
+  # which the engine will snapshot the cache and write it to
+  # a new TSM file if the shard hasn't received writes or deletes
+  cache-snapshot-write-cold-duration = "{{ influxdb_data_cache_snapshot_write_cold_duration }}"
+
+  # MinCompactionFileCount is the minimum number of TSM files
+  # that need to exist before a compaction cycle will run
+  compact-min-file-count = {{ influxdb_data_compact_min_file_count }}
+
+  # CompactFullWriteColdDuration is the duration at which the engine
+  # will compact all TSM files in a shard if it hasn't received a
+  # write or delete
+  compact-full-write-cold-duration = "{{ influxdb_data_compact_full_write_cold_duration }}"
+
+  # MaxPointsPerBlock is the maximum number of points in an encoded
+  # block in a TSM file. Larger numbers may yield better compression
+  # but could incur a performance peanalty when querying
+  max-points-per-block = {{ influxdb_data_max_points_per_block }}
+
+###
+### [cluster]
+###
+### Controls non-Raft cluster behavior, which generally includes how data is
+### shared across shards.
+###
+
+[cluster]
+  shard-writer-timeout = "{{ influxdb_cluster_shard_writer_timeout }}" # The time within which a shard must respond to write.
+  write-timeout = "{{ influxdb_cluster_write_timeout }}" # The time within which a write operation must complete on the cluster.
+  max-concurrent-queries = {{ influxdb_cluster_max_concurrent_queries }} # The maximum number of concurrent queries that can run. 0 to disable.
+  query-timeout = "{{ influxdb_cluster_query_timeout }}" # The time within a query must complete before being killed automatically. 0s to disable.
+  max-select-point = {{ influxdb_cluster_max_select_point }} # The maximum number of points to scan in a query. 0 to disable.
+  max-select-series = {{ influxdb_cluster_max_select_series }} # The maximum number of series to select in a query. 0 to disable.
+  max-select-buckets = {{ influxdb_cluster_max_select_buckets }} # The maximum number of buckets to select in an aggregate query. 0 to disable.
 
 ###
 ### [hinted-handoff]
@@ -98,6 +115,7 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
 ### store queued data when one node of a cluster is down for a short period
 ### of time.
 ###
+### Not used in single server mode
 
 [hinted-handoff]
   enabled = {{ influxdb_hh_enabled }}
@@ -118,17 +136,6 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
   # 2) the target node has been dropped from the cluster. Data is never dropped until
   # it has reached max-age however, for a dropped node or not.
   purge-interval = "{{ influxdb_hh_purge_interval }}"
-
-###
-### [cluster]
-###
-### Controls non-Raft cluster behavior, which generally includes how data is
-### shared across shards.
-###
-
-[cluster]
-  shard-writer-timeout = "{{ influxdb_cluster_shard_writer_timeout }}" # The time within which a shard must respond to write.
-  write-timeout = "{{ influxdb_cluster_write_timeout }}" # The time within which a write operation must complete on the cluster.
 
 ###
 ### [retention]
@@ -208,7 +215,6 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
   bind-address = "{{ influxdb_graphite_bind_address }}"
   protocol = "{{ influxdb_graphite_protocol }}"
   consistency-level = "{{ influxdb_graphite_consistency_level }}"
-  name-separator = "{{ influxdb_graphite_name_separator }}"
 
   # These next lines control how batching works. You should have this enabled
   # otherwise you could get dropped metrics or poor performance. Batching
@@ -218,25 +224,27 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
   batch-pending = {{ influxdb_graphite_batch_pending }} # number of batches that may be pending in memory
   batch-timeout = "{{ influxdb_graphite_batch_timeout }}" # will flush at least this often even if we haven't hit buffer limit
 
-  ## "name-schema" configures tag names for parsing the metric name from graphite protocol;
-  ## separated by `name-separator`.
-  ## The "measurement" tag is special and the corresponding field will become
-  ## the name of the metric.
-  ## e.g. "type.host.measurement.device" will parse "server.localhost.cpu.cpu0" as
-  ## {
-  ##     measurement: "cpu",
-  ##     tags: {
-  ##         "type": "server",
-  ##         "host": "localhost,
-  ##         "device": "cpu0"
-  ##     }
-  ## }
-  name-schema = "{{ influxdb_graphite_name_schema }}"
+  ### This string joins multiple matching 'measurement' values providing more control over the final measurement name.
+  separator = "{{ influxdb_graphite_separator }}"
+  udp-read-buffer = {{ influxdb_graphite_udp_read_buffer }} # UDP Read buffer size, 0 means OS default. UDP listener will fail if set above OS max.
 
-  ## If set to true, when the input metric name has more fields than `name-schema` specified,
-  ## the extra fields will be ignored.
-  ## Otherwise an error will be logged and the metric rejected.
-  ignore-unnamed = {{ influxdb_graphite_ignore_unnamed }}
+  ### Default tags that will be added to all metrics.  These can be overridden at the template level
+  ### or by tags extracted from metric
+  # tags = ["region=us-east", "zone=1c"]
+  {% if influxdb_graphite_tags is defined %}
+  tags = [{{ influxdb_graphite_tags | join(",") }}]
+  {% endif %}
+
+  ### Each template line requires a template pattern.  It can have an optional
+  ### filter before the template and separated by spaces.  It can also have optional extra
+  ### tags following the template.  Multiple tags should be separated by commas and no spaces
+  ### similar to the line protocol format.  There can be only one default template.
+  # templates = [
+  #   "*.app env.service.resource.measurement",
+  #   # Default template
+  #   "server.*",
+  # ]
+  templates = [{{ influxdb_graphite_templates | join(",") }}]
   {% endif %}
 
 ###
@@ -259,6 +267,7 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
   batch-size = {{ influxdb_collectd_batch_size }} # will flush if this many points get buffered
   batch-pending = {{ influxdb_collectd_batch_pending }} # number of batches that may be pending in memory
   batch-timeout = "{{ influxdb_collectd_batch_timeout }}" # will flush at least this often even if we haven't hit buffer limit
+  read-buffer = {{ influxdb_collectd_read_buffer }}
   {% endif %}
 
 ###
@@ -276,6 +285,7 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
   consistency-level = "{{ influxdb_tsb_consistency_level }}"
   tls-enabled = {{ influxdb_tsb_tls_enabled }}
   certificate = "{{ influxdb_tsb_certificate }}"
+  log-point-errors = {{ influxdb_tsb_log_point_errors }} # Log an error for every malformed point.
 
   # These next lines control how batching works. You should have this enabled
   # otherwise you could get dropped metrics or poor performance. Only points
@@ -307,6 +317,9 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
   batch-size = {{ influxdb_udp_batch_size }} # will flush if this many points get buffered
   batch-pending = {{ influxdb_udp_batch_pending }} # number of batches that may be pending in memory
   batch-timeout = "{{ influxdb_udp_batch_timeout }}" # will flush at least this often even if we haven't hit buffer limit
+
+  # set the expected UDP payload size; lower values tend to yield better performance, default is max UDP size 65536
+  udp-payload-size = {{ influxdb_udp_payload_size }}
   {% endif %}
 
 ###
@@ -318,7 +331,4 @@ reporting-disabled = {{ influxdb_reporting_disabled }}
 [continuous_queries]
   log-enabled = {{ influxdb_cqueries_log_enabled }}
   enabled = {{ influxdb_cqueries_enabled }}
-  recompute-previous-n = {{ influxdb_cqueries_recompute_previous_n }}
-  recompute-no-older-than = "{{ influxdb_cqueries_recompute_no_older_than }}"
-  compute-runs-per-interval = {{ influxdb_cqueries_compute_runs_per_interval }}
-  compute-no-more-than = "{{ influxdb_cqueries_compute_no_more_than }}"
+  run-interval = "{{ influxdb_cqueries_run_interval }}"
