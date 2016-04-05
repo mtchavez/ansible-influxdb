@@ -1,8 +1,10 @@
-# Unreleased
+# v5.0.0 - 2016-04-05
 
 * Test Kitchen setup and integration
 * Updates to role for open source role conventions
 * Collectd setup when enabled
+* UDP read buffer configurable
+* Update to InfluxDB 11.x and configuration >= 10.x (backwards incompatible changes)
 
 # v4.0.0 – 2016-01-02
 
