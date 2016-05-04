@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     artifactory (2.3.2)
+    diff-lcs (1.2.5)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     highline (1.7.8)
@@ -10,9 +11,6 @@ GEM
       test-kitchen (~> 1.4)
     kitchen-docker (2.3.0)
       test-kitchen (>= 1.0.0)
-    kitchen-verifier-serverspec (0.4.0)
-      net-ssh (~> 2.0)
-      test-kitchen (~> 1.4)
     librarian (0.1.2)
       highline
       thor (~> 0.15)
@@ -25,11 +23,36 @@ GEM
       mixlib-versioning (>= 1.1.0)
     mixlib-shellout (2.2.6)
     mixlib-versioning (1.1.0)
+    multi_json (1.11.1)
     multipart-post (2.0.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.4)
+    rspec (3.3.0)
+      rspec-core (~> 3.3.0)
+      rspec-expectations (~> 3.3.0)
+      rspec-mocks (~> 3.3.0)
+    rspec-core (3.3.2)
+      rspec-support (~> 3.3.0)
+    rspec-expectations (3.3.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.3.0)
+    rspec-its (1.2.0)
+      rspec-core (>= 3.0.0)
+      rspec-expectations (>= 3.0.0)
+    rspec-mocks (3.3.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.3.0)
+    rspec-support (3.3.0)
     safe_yaml (1.0.4)
+    serverspec (2.18.0)
+      multi_json
+      rspec (~> 3.0)
+      rspec-its
+      specinfra (~> 2.35)
+    specinfra (2.36.6)
+      net-scp
+      net-ssh
     test-kitchen (1.7.1)
       mixlib-install (~> 1.0, >= 1.0.2)
       mixlib-shellout (>= 1.2, < 3.0)
@@ -45,8 +68,8 @@ PLATFORMS
 DEPENDENCIES
   kitchen-ansible
   kitchen-docker
-  kitchen-verifier-serverspec
+  serverspec
   test-kitchen
 
 BUNDLED WITH
-   1.11.2
+   1.12.0

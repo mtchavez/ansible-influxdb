@@ -7,7 +7,8 @@ platforms:
   - name: "ubuntu-14.04"
 
 verifier:
-  name: serverspec
+  name: shell
+  command: rspec -c -f d -I serverspec spec/*_spec.rb
 
 suites:
   - name: default
