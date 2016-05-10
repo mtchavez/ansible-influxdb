@@ -1,5 +1,8 @@
 require_relative './spec_helper.rb'
 
+# Wait for the converge to be complete before verification
+sleep(3)
+
 describe 'ubuntu', if: %w[debian ubuntu].include?(os[:family]) do
   describe group('influxdb') do
     it { should exist }
