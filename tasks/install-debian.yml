@@ -1,0 +1,24 @@
+- name: Install any necessary dependency
+  apt:
+    name: "apt-transport-https"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Import InfluxData GPG signing key
+  apt_key:
+    url: https://repos.influxdata.com/influxdb.key
+    state: present
+    id: "0x2582E0C5"
+
+- name: Add InfluxData repository
+  apt_repository:
+    repo: deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ influxdb_repository_channel }}
+    state: present
+
+- name: Install InfluxDB package
+  apt:
+    name: influxdb
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
