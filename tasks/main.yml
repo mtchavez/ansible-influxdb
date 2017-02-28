@@ -29,48 +29,17 @@
   tags:
     - influxdb
 
-- name: Create data dir
+- name: Create data and config directories
   file:
-    path: "{{ influxdb_data_dir }}"
+    path: "{{ item }}"
     state: directory
     group: "{{ influxdb_group }}"
     owner: "{{ influxdb_user }}"
-  tags:
-    - influxdb
-
-- name: Create meta dir
-  file:
-    path: "{{ influxdb_meta_dir }}"
-    state: directory
-    group: "{{ influxdb_group }}"
-    owner: "{{ influxdb_user }}"
-  tags:
-    - influxdb
-
-- name: Create hh dir
-  file:
-    path: "{{ influxdb_hh_dir }}"
-    state: directory
-    group: "{{ influxdb_group }}"
-    owner: "{{ influxdb_user }}"
-  tags:
-    - influxdb
-
-- name: Create wal dir
-  file:
-    path: "{{ influxdb_wal_dir }}"
-    state: directory
-    group: "{{ influxdb_group }}"
-    owner: "{{ influxdb_user }}"
-  tags:
-    - influxdb
-
-- name: Create config directory
-  file:
-    path: "{{ influxdb_config_dir }}"
-    state: directory
-    group: "{{ influxdb_group }}"
-    owner: "{{ influxdb_user }}"
+  with_items:
+    - "{{ influxdb_data_dir }}"
+    - "{{ influxdb_meta_dir }}"
+    - "{{ influxdb_wal_dir }}"
+    - "{{ influxdb_config_dir }}"
   tags:
     - influxdb
 
@@ -86,11 +55,10 @@
   tags:
     - influxdb
 
-# TODO: Find out why this doesn't work
-# TODO: Update to use Ansible 2.0 run as instead of sudo
 - name: Run config update
-  command: "sudo {{ influxdb_influxd_bin }} config -config {{ influxdb_generated_config }}"
+  command: "{{ influxdb_influxd_bin }} config -config {{ influxdb_generated_config }}"
   register: influxdb_merged_config
+  become: yes
   when: write_config | changed
   tags:
     - influxdb
@@ -114,7 +82,6 @@
   with_items:
     - "{{ influxdb_meta_dir }}"
     - "{{ influxdb_data_dir }}"
-    - "{{ influxdb_hh_dir }}"
     - "{{ influxdb_wal_dir }}"
   tags:
     - influxdb

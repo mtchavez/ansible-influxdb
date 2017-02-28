@@ -1,8 +1,14 @@
-# TODO: Use md5sum to check download
+---
+- name: Install ca-certificates
+  apt:
+    name: ca-certificates
+    state: present
+
 - name: Download version
   get_url:
     url: "{{ influxdb_dl_url }}"
     dest: "{{ influxdb_pkg }}"
+    checksum: "md5:{{ influxdb_md5_checksum }}"
   tags:
     - influxdb
 
