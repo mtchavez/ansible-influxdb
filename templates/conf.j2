@@ -421,9 +421,9 @@ hostname = "{{ influxdb_hostname }}"
   typesdb = "{{ influxdb_collectd_typesdb_directory }}/types.db"
   #
   # security-level = "none"
-  security-level = "{{ influxdb_collectd_security-level }}"
+  security-level = "{{ influxdb_collectd_security_level }}"
   # auth-file = "/etc/collectd/auth_file"
-  auth-file = "{{ influxdb_collectd_auth-file }}"
+  auth-file = "{{ influxdb_collectd_auth_file }}"
 
   # These next lines control how batching works. You should have this enabled
   # otherwise you could get dropped metrics or poor performance. Batching

@@ -7,7 +7,7 @@ influxdb_dl_url: "https://dl.influxdata.com/influxdb/releases/influxdb_{{  influ
 influxdb_pkg: "/usr/local/src/influxdb_{{  influxdb_ver  }}_{{  influxdb_arch  }}.deb"
 
 # Set influxdb_install_method to "repository" to install influxdb from influxdata's repository
-influxdb_install_method: "repository"
+influxdb_install_method: "repository" # or "download"
 influxdb_repository_channel: "stable"
 
 influxdb_maxprocs: "{{ ansible_processor_vcpus }}"
@@ -122,8 +122,8 @@ influxdb_collectd_bind_address: ":25826"
 influxdb_collectd_database: "collectd"
 influxdb_collectd_retention_policy: ""
 influxdb_collectd_typesdb: "/usr/share/collectd/types.db"
-influxdb_collectd_security-level: "none"
-influxdb_collectd_auth-file: "/etc/collectd/auth_file"
+influxdb_collectd_security_level: "none"
+influxdb_collectd_auth_file: "/etc/collectd/auth_file"
 influxdb_collectd_batch_size: 5000
 influxdb_collectd_batch_pending: 10
 influxdb_collectd_batch_timeout: "10s"
