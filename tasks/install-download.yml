@@ -3,14 +3,34 @@
   apt:
     name: ca-certificates
     state: present
+  tags:
+    - influxdb
 
-- name: Download version
+- name: Download version when python >= 2.7.9
   get_url:
     url: "{{ influxdb_dl_url }}"
     dest: "{{ influxdb_pkg }}"
     checksum: "md5:{{ influxdb_md5_checksum }}"
+  when: ansible_python_version|version_compare('2.7.9', '>=')
   tags:
     - influxdb
+
+- name: Install curl when python < 2.7.9
+  apt:
+    name: curl
+    state: present
+  when: ansible_python_version|version_compare('2.7.9', '<')
+  tags:
+    - influxdb
+
+- name: Download version when python < 2.7.9
+  command: curl -o "{{ influxdb_pkg }}" "{{ influxdb_dl_url }}"
+  args:
+    creates: "{{ influxdb_pkg }}"
+  when: ansible_python_version|version_compare('2.7.9', '<')
+  tags:
+    - influxdb
+    - skip_ansible_lint
 
 - name: Install package
   command: "dpkg --skip-same-version -i {{ influxdb_pkg }}"

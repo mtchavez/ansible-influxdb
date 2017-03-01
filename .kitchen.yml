@@ -30,7 +30,24 @@ suites:
       playbook: role.yml
       hosts: hosts
       extra_vars:
+        influxdb_install_method: "repository"
         influxdb_collectd_enabled: "true"
+        influxdb_admin_enabled: "true"
+      additional_copy_path:
+        - "."
+    verifier:
+      patterns:
+        - "./spec/*_spec.rb"
+
+  - name: download
+    provisioner:
+      name: ansible_playbook
+      playbook: role.yml
+      hosts: hosts
+      extra_vars:
+        influxdb_install_method: "download"
+        influxdb_collectd_enabled: "true"
+        influxdb_admin_enabled: "true"
       additional_copy_path:
         - "."
     verifier:
