@@ -5,4 +5,5 @@ group :test do
   gem 'kitchen-docker'
   gem 'test-kitchen'
   gem 'serverspec'
+  gem 'net-telnet'
 end
