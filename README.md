@@ -16,6 +16,8 @@ Ansible version 1.6 and greater
 Variables are mostly what exists in the InfluxDB config file. Which you can see [here](https://raw.githubusercontent.com/influxdb/influxdb/master/etc/config.sample.toml)
 
 ```
+influxdb_install_method: "repository" # or "download"
+
 influxdb_collectd_typesdb_url: "https://raw.githubusercontent.com/collectd/collectd/master/src/types.db"
 influxdb_collectd_typesdb_directory: "/usr/share/collectd"
 
@@ -26,56 +28,32 @@ influxdb_config_dir: "/etc/influxdb"
 influxdb_config_file: "{{ influxdb_config_dir }}/influxdb.conf"
 influxdb_generated_config: "{{ influxdb_config_dir }}/influxdb.generated.conf"
 influxdb_reporting_disabled: "false"
-influxdb_base_data_dir: "/var/lib/influxdb"
-influxdb_influxd_bin: "/usr/bin/influxd"
-influxdb_scripts_dir: "/usr/lib/influxdb/scripts"
 
 # [meta]
-influxdb_meta_enabled: "true"
 influxdb_meta_dir: "{{ influxdb_base_data_dir }}/meta"
-influxdb_bind_address: ":8088"
-influxdb_meta_http_bind_address: ":8091"
 influxdb_retention_autocreate: "true"
-influxdb_election_timeout: "1s"
-influxdb_heartbeat_timeout: "1s"
-influxdb_leader_lease_timeout: "500ms"
-influxdb_commit_timeout: "50ms"
 influxdb_meta_logging_enabled: "true"
-influxdb_meta_pprof_enabled: "false"
-influxdb_meta_lease_duration: "1m0s"
 
 # [data]
-influxdb_data_enabled: "true"
 influxdb_data_dir: "{{ influxdb_base_data_dir }}/data"
-influxdb_data_logging_enabled: "true"
-influxdb_data_query_log_enabled: "true"
-influxdb_data_cache_max_memory_size: 524288000
-influxdb_data_cache_snapshot_memory_size: 26214400
-influxdb_data_cache_snapshot_write_cold_duration: "1h"
-influxdb_data_compact_min_file_count: 3
-influxdb_data_compact_full_write_cold_duration: "24h"
-influxdb_data_max_points_per_block: 1000
 influxdb_wal_dir: "{{ influxdb_base_data_dir }}/wal"
-influxdb_wal_logging_enabled: "true"
+influxdb_data_trace_logging_enabled: "false"
+influxdb_data_query_log_enabled: "true"
+influxdb_data_cache_max_memory_size: 1048576000
+influxdb_data_cache_snapshot_memory_size: 26214400
+influxdb_data_cache_snapshot_write_cold_duration: "10m"
+influxdb_data_compact_full_write_cold_duration: "4h"
+influxdb_data_max_series_per_database: 1000000
+influxdb_data_max_values_per_tag: 100000
 
-# [cluster]
-influxdb_cluster_shard_writer_timeout: "10s"
-influxdb_cluster_write_timeout: "5s"
-influxdb_cluster_max_concurrent_queries: 0
-influxdb_cluster_query_timeout: "0s"
-influxdb_cluster_max_select_point: 0
-influxdb_cluster_max_select_series: 0
-influxdb_cluster_max_select_buckets: 0
-
-# [hinted-handoff]
-influxdb_hh_enabled: "false"
-influxdb_hh_dir: "{{ influxdb_base_data_dir }}/hh"
-influxdb_hh_max_size: 1073741824
-influxdb_hh_max_age: "168h"
-influxdb_hh_retry_rate_limit: 0
-influxdb_hh_retry_interval: "1s"
-influxdb_hh_retry_max_interval: "1m"
-influxdb_hh_purge_interval: "1h"
+# [coordinator]
+influxdb_coordinator_write_timeout: "10s"
+influxdb_coordinator_max_concurrent_queries: 0
+influxdb_coordinator_query_timeout: "0s"
+influxdb_coordinator_log_queries_after: "0s"
+influxdb_coordinator_max_select_point: 0
+influxdb_coordinator_max_select_series: 0
+influxdb_coordinator_max_select_buckets: 0
 
 # [retention]
 influxdb_retention_enabled: "true"
@@ -92,7 +70,7 @@ influxdb_monitor_store_database: "_internal"
 influxdb_monitor_store_interval: "10s"
 
 # [admin]
-influxdb_admin_enabled: "true"
+influxdb_admin_enabled: "false"
 influxdb_admin_bind_address: ":8083"
 influxdb_admin_https_enabled: "false"
 influxdb_admin_https_certificate: "/etc/ssl/influxdb.pem"
@@ -101,63 +79,82 @@ influxdb_admin_https_certificate: "/etc/ssl/influxdb.pem"
 influxdb_http_enabled: "true"
 influxdb_http_bind_address: ":8086"
 influxdb_http_auth_enabled: "false"
+influxdb_http_realm: "InfluxDB"
 influxdb_http_log_enabled: "true"
 influxdb_http_write_tracing: "false"
-influxdb_http_pprof_enabled: "false"
+influxdb_http_pprof_enabled: "true"
 influxdb_http_https_enabled: "false"
 influxdb_http_https_certificate: "/etc/ssl/influxdb.pem"
+influxdb_http_https_private_key: ""
+influxdb_http_shared_sercret: ""
+influxdb_http_max_row_limit: 10000
+influxdb_http_max_connection_limit: 0
+influxdb_http_unix_socket_enabled: "false"
+influxdb_http_bind_socket: "/var/run/influxdb.sock"
+
+# [subscriber]
+influxdb_subscriber_enabled: "true"
+influxdb_subscriber_http_timeout: "30s"
+influxdb_subscriber_insecure_skip_verify: "false"
+influxdb_subscriber_ca_certs: ""
+influxdb_subscriber_write_concurrency: 40
+influxdb_subscriber_write_buffer_size: 1000
 
 # [[graphite]]
 influxdb_graphite_enabled: "false"
 influxdb_graphite_database: "graphite"
+influxdb_graphite_retention_policy: ""
 influxdb_graphite_bind_address: ":2003"
 influxdb_graphite_protocol: "tcp"
 influxdb_graphite_consistency_level: "one"
-influxdb_graphite_separator: "."
-influxdb_graphite_udp_read_buffer: 0
-influxdb_graphite_batch_size: 1000
+influxdb_graphite_batch_size: 5000
 influxdb_graphite_batch_pending: 5
 influxdb_graphite_batch_timeout: "1s"
+influxdb_graphite_udp_read_buffer: 0
+influxdb_graphite_separator: "."
+#influxdb_graphite_tags: [ "region=us-east", "zone=1c" ]
 influxdb_graphite_templates:
   - "type.host.measurement.device"
 
-# [collectd]
+# [[collectd]]
 influxdb_collectd_enabled: "false"
 influxdb_collectd_bind_address: ":25826"
 influxdb_collectd_database: "collectd"
+influxdb_collectd_retention_policy: ""
 influxdb_collectd_typesdb: "/usr/share/collectd/types.db"
-influxdb_collectd_batch_size: 1000
-influxdb_collectd_batch_pending: 5
-influxdb_collectd_batch_timeout: "1s"
+influxdb_collectd_security_level: "none"
+influxdb_collectd_auth_file: "/etc/collectd/auth_file"
+influxdb_collectd_batch_size: 5000
+influxdb_collectd_batch_pending: 10
+influxdb_collectd_batch_timeout: "10s"
 influxdb_collectd_read_buffer: 0
 
-# [opentsdb]
+# [[opentsdb]]
 influxdb_tsb_enabled: "false"
 influxdb_tsb_bind_address: ":4242"
 influxdb_tsb_database: "opentsdb"
 influxdb_tsb_retention_policy: ""
 influxdb_tsb_consistency_level: "one"
 influxdb_tsb_tls_enabled: "false"
-influxdb_tsb_certificate: ""
+influxdb_tsb_certificate: "/etc/ssl/influxdb.pem"
+influxdb_tsb_log_point_errors: "true"
 influxdb_tsb_batch_size: 1000
 influxdb_tsb_batch_pending: 5
 influxdb_tsb_batch_timeout: "1s"
-influxdb_tsb_log_point_errors: "true"
 
 # [[udp]]
 influxdb_udp_enabled: "false"
-influxdb_udp_bind_address: ""
+influxdb_udp_bind_address: ":8089"
 influxdb_udp_database: "udp"
 influxdb_udp_retention_policy: ""
-influxdb_udp_batch_size: 1000
-influxdb_udp_batch_pending: 5
+influxdb_udp_batch_size: 5000
+influxdb_udp_batch_pending: 10
 influxdb_udp_batch_timeout: "1s"
 influxdb_udp_read_buffer: 0
-influxdb_udp_payload_size: 65536
 
 # [continuous_queries]
-influxdb_cqueries_log_enabled: "true"
 influxdb_cqueries_enabled: "true"
+influxdb_cqueries_log_enabled: "true"
 influxdb_cqueries_run_interval: "1s"
 ```
 

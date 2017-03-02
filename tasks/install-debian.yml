@@ -19,6 +19,6 @@
 - name: Install InfluxDB package
   apt:
     name: influxdb
-    state: latest
+    state: present
     update_cache: yes
     cache_valid_time: 3600

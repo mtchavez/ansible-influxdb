@@ -3,7 +3,7 @@ galaxy_info:
   author: mtchavez
   description: InfluxDB
   license: MIT
-  min_ansible_version: 1.6
+  min_ansible_version: 1.9
   platforms:
     - name: Ubuntu
       versions:
@@ -12,6 +12,7 @@ galaxy_info:
       - raring
       - saucy
       - trusty
+      - xenial
     - name: Debian
       versions:
       - all
@@ -27,4 +28,3 @@ galaxy_info:
     - monitoring
 
 dependencies: []
-

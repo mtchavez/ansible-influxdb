@@ -16,7 +16,7 @@ describe 'ubuntu', if: %w[debian ubuntu].include?(os[:family]) do
     it { should be_installed }
   end
 
-  %w[data hh meta wal].each do |dir|
+  %w[data meta wal].each do |dir|
     describe file("/var/lib/influxdb/#{dir}") do
       it { should be_directory }
     end
