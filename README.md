@@ -3,13 +3,13 @@
 [![Build Status](https://travis-ci.org/mtchavez/ansible-influxdb.svg?branch=master)](https://travis-ci.org/mtchavez/ansible-influxdb)
 
 InfluxDB Ansible Galaxy role. Sets up a working InfluxDB server.
-This role is for versions of InfluxDB >= `0.11.1` and is currently defaulted to `0.11.1.1`.
+This role is for versions of InfluxDB >= `1.2.0` and is currently defaulted to `1.2.0`.
 
 **Currenlty clustering is not taken into account for.**
 
 ## Requirements
 
-Ansible version 1.6 and greater
+Ansible version `>= 1.9`
 
 ## Role Variables
 
