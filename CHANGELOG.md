@@ -1,3 +1,7 @@
+# v6.0.0 - 2017-03-20
+
+* Major update of role to InfluxDB `1.2.0` - thanks to [popstas](https://github.com/popstas)
+
 # v5.0.0 - 2016-04-05
 
 * Test Kitchen setup and integration
