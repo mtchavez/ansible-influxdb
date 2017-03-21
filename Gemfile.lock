@@ -28,6 +28,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.4)
+    net-telnet (0.1.1)
     rspec (3.3.0)
       rspec-core (~> 3.3.0)
       rspec-expectations (~> 3.3.0)
@@ -68,8 +69,9 @@ PLATFORMS
 DEPENDENCIES
   kitchen-ansible
   kitchen-docker
+  net-telnet
   serverspec
   test-kitchen
 
 BUNDLED WITH
-   1.12.0
+   1.14.5
