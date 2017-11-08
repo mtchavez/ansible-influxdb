@@ -16,15 +16,15 @@
     - influxdb
 
 - name: Configure collectd
-  include: collectd.yml
+  include_tasks: collectd.yml
   when: influxdb_collectd_enabled == "true"
 
-- include: install-download.yml
+- include_tasks: install-download.yml
   when: influxdb_install_method == "download"
   tags:
     - influxdb
 
-- include: install-debian.yml
+- include_tasks: install-debian.yml
   when: influxdb_install_method == "repository" and ansible_distribution in ["Debian", "Ubuntu"]
   tags:
     - influxdb
