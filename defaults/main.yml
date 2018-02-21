@@ -10,6 +10,10 @@ influxdb_pkg: "/usr/local/src/influxdb_{{  influxdb_ver  }}_{{  influxdb_arch  }
 influxdb_install_method: "repository" # or "download"
 influxdb_repository_channel: "stable"
 
+# Influx repo URLs
+influxdb_apt_repo_url: "deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ influxdb_repository_channel }}"
+influxdb_apt_key_url: "https://repos.influxdata.com/influxdb.key"
+
 influxdb_maxprocs: "{{ ansible_processor_vcpus }}"
 influxdb_hostname: "{{ ansible_nodename }}"
 influxdb_keep_initd: false
