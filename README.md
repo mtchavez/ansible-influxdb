@@ -45,6 +45,7 @@ influxdb_data_cache_snapshot_write_cold_duration: "10m"
 influxdb_data_compact_full_write_cold_duration: "4h"
 influxdb_data_max_series_per_database: 1000000
 influxdb_data_max_values_per_tag: 100000
+influxdb_index_version: "inmem"
 
 # [coordinator]
 influxdb_coordinator_write_timeout: "10s"
