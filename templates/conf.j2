@@ -101,6 +101,10 @@ hostname = "{{ influxdb_hostname }}"
   # max-values-per-tag = 100000
   max-values-per-tag = {{ influxdb_data_max_values_per_tag }}
 
+  # The type of shard index to use for new shards. The default (inmem) index is an in-memory index that is recreated at startup.
+  # To enable the Time Series Index (TSI) disk-based index, set the value to tsi1.
+  index-version = {{ influxdb_index_version }}
+
 ###
 ### [coordinator]
 ###
