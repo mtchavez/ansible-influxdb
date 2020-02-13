@@ -2,7 +2,7 @@
 
 - name: Test influxdb
   hosts: all
-  sudo: yes
+  become: true
   roles:
     - ""
   vars_files:
