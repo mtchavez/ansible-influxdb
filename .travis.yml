@@ -5,6 +5,7 @@ rvm:
   - 2.2.3
 before_install:
   - sudo apt-get update -qq
+  - sudo apt-get install python3
   - "curl -fsSL https://get.docker.com/ | sh"
   - sudo usermod -aG docker travis
 install:
