@@ -59,7 +59,7 @@
   command: "{{ influxdb_influxd_bin }} config -config {{ influxdb_generated_config }}"
   register: influxdb_merged_config
   become: yes
-  when: write_config | changed
+  when: write_config is changed
   tags:
     - influxdb
 
@@ -69,7 +69,7 @@
     dest: "{{ influxdb_config_file }}"
     group: "{{ influxdb_group }}"
     owner: "{{ influxdb_user }}"
-  when: influxdb_merged_config | changed
+  when: influxdb_merged_config is changed
   tags:
     - influxdb
 
